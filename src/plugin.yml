@@ -1,0 +1,4 @@
+## YAML Template.
+name: Quest
+main: com.mahn42.anhalter42.quest.QuestPlugin
+version: 0.01
