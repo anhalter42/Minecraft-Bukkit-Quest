@@ -26,12 +26,34 @@ Minecraft-Bukkit-Quest
         Triggers
           - type: startScene
             Actions
-              - type: loadLevel
+              - type: loadFrame
                 index: 0
-          - type: enterRegion
+          - type: playerEnterRegion
             from: 10,1,10
             to:   20,1,20
             Actions
-              - type: loadLevel
+              - type: loadFrame
                 index: 1
-                
+
+Trigger
+=======
+
+initQuest
+startQuest
+initScene
+startScene
+playerEnterRegion <x>,<y>,<z> [<x>,<y>,<z>]
+playerLeaveRegion <x>,<y>,<z> [<x>,<y>,<z>]
+timerFinished <name>
+
+Actions
+=======
+
+loadFrame index [full|mixed|reverse] [<x>,<y>,<z>]
+fillRegion <Material> <Data> <x>,<y>,<z> [<x>,<y>,<z>]
+startTimer <name> <ticks>
+stopTimer <name>
+continueTimer <name>
+toggleLever <x>,<y>,<z>
+activateLever <x>,<y>,<z>
+deactivateLever <x>,<y>,<z>
