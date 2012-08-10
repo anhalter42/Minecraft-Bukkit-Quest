@@ -38,22 +38,22 @@ Minecraft-Bukkit-Quest
 Trigger
 =======
 
-initQuest
-startQuest
-initScene
-startScene
-playerEnterRegion <x>,<y>,<z> [<x>,<y>,<z>]
-playerLeaveRegion <x>,<y>,<z> [<x>,<y>,<z>]
-timerFinished <name>
+    initQuest
+    startQuest
+    initScene
+    startScene
+    playerEnterRegion <x>,<y>,<z> [<x>,<y>,<z>]
+    playerLeaveRegion <x>,<y>,<z> [<x>,<y>,<z>]
+    timerFinished <name>
 
 Actions
 =======
 
-loadFrame index [full|mixed|reverse] [<x>,<y>,<z>]
-fillRegion <Material> <Data> <x>,<y>,<z> [<x>,<y>,<z>]
-startTimer <name> <ticks>
-stopTimer <name>
-continueTimer <name>
-toggleLever <x>,<y>,<z>
-activateLever <x>,<y>,<z>
-deactivateLever <x>,<y>,<z>
+    loadFrame index [full|mixed|reverse] [<x>,<y>,<z>]
+    fillRegion <Material> <Data> <x>,<y>,<z> [<x>,<y>,<z>]
+    startTimer <name> <ticks>
+    stopTimer <name>
+    continueTimer <name>
+    toggleLever <x>,<y>,<z>
+    activateLever <x>,<y>,<z>
+    deactivateLever <x>,<y>,<z>
