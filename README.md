@@ -32,8 +32,20 @@ Minecraft-Bukkit-Quest
             from: 10,1,10
             to:   20,1,20
             Actions
+              - type: startScene
+                name: level1
+      - name: level1
+        Triggers
+          - type: SceneInitialized
+            Actions
               - type: loadFrame
                 index: 1
+          - type: PlayerEnteredRegion
+            from: 10,1,10
+            to:   20,1,20
+            Actions
+              - type: activateLever
+                pos: 10,2,10
 
 Trigger
 =======
