@@ -21,39 +21,39 @@ Minecraft-Bukkit-Quest
                 
     name: TestQuest
     startscene: start
+    markers:
+      - name: PortalLever
+        pos: 15,2,15
     Scenes
       - name: start
-        Triggers
+        triggers:
           - type: SceneInitialized
-            Actions
+            actions:
               - type: loadFrame
                 index: 0
           - type: PlayerEnteredRegion
             from: 10,1,10
             to:   20,1,20
-            Actions
+            actions:
               - type: startScene
                 name: level1
       - name: level1
-        Triggers
+        triggers:
           - type: SceneInitialized
-            Actions
+            actions:
               - type: loadFrame
                 index: 1
           - type: PlayerEnteredRegion
             from: 10,1,10
             to:   20,1,20
-            Actions
+            actions:
               - type: activateLever
-                pos: 10,2,10
+                pos: PortalLever
 
 Trigger
 =======
 
-    [QuestInitialized]
-    [QuestStarted]
     SceneInitialized
-    [SceneStarted]
     PlayerEnteredRegion <x>,<y>,<z> [<x>,<y>,<z>]
     PlayerLeftRegion <x>,<y>,<z> [<x>,<y>,<z>]
     TimerFinished <name>
@@ -64,6 +64,7 @@ Actions
     startScene <name>
     loadFrame index [full|mixed|reverse] [<x>,<y>,<z>]
     fillRegion <Material> <Data> <x>,<y>,<z> [<x>,<y>,<z>]
+    generateRegion <Generator> <x>,<y>,<z> [<x>,<y>,<z>]
     startTimer <name> <ticks>
     stopTimer <name>
     continueTimer <name>
