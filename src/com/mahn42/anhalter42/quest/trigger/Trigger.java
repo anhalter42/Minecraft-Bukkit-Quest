@@ -50,9 +50,12 @@ public class Trigger extends QuestObject {
     }
 
     public void initialize() {
+        for(Action lAction : actions) {
+            lAction.initialize();
+        }
     }
     
-    public boolean check(Quest aQuest) {
+    public boolean check() {
         return false;
     }
 }

@@ -24,7 +24,6 @@ public class Action extends QuestObject{
     public void initialize() {
     }
 
-    public void execute(Quest aQuest) {
-        
+    public void execute() {
     }
 }

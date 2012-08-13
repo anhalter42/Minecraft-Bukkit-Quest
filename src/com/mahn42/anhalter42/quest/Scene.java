@@ -5,7 +5,6 @@
 package com.mahn42.anhalter42.quest;
 
 import com.mahn42.anhalter42.quest.trigger.Trigger;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -17,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class Scene extends QuestObject {
     
-    public String name;
+    public String name = "";
     public ArrayList<Trigger> triggers = new ArrayList<Trigger>();
 
     public void setTriggersFromSectionValue(Object aValue) {
@@ -43,6 +42,9 @@ public class Scene extends QuestObject {
     }
 
     public void initilize() {
+        for(Trigger lTrigger : triggers) {
+            lTrigger.initialize();
+        }
     }
     
     public void run() {
