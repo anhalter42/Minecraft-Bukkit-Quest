@@ -24,30 +24,39 @@ Minecraft-Bukkit-Quest
     markers:
       - name: PortalLever
         pos: 15,2,15
-    Scenes
+    scenes
       - name: start
         triggers:
-          - type: SceneInitialized
+          -
+            type: SceneInitialized
             actions:
-              - type: loadFrame
+              -
+                type: loadFrame
                 index: 0
-          - type: PlayerEnteredRegion
+          -
+            type: PlayerEnteredRegion
             from: 10,1,10
             to:   20,1,20
             actions:
-              - type: startScene
+              -
+                type: startScene
                 name: level1
-      - name: level1
+      -
+        name: level1
         triggers:
-          - type: SceneInitialized
+          -
+            type: SceneInitialized
             actions:
-              - type: loadFrame
+              -
+                type: loadFrame
                 index: 1
-          - type: PlayerEnteredRegion
+          -
+            type: PlayerEnteredRegion
             from: 10,1,10
             to:   20,1,20
             actions:
-              - type: activateLever
+              -
+                type: activateLever
                 pos: PortalLever
 
 Trigger
