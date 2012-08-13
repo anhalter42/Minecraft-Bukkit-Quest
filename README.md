@@ -22,10 +22,12 @@ Minecraft-Bukkit-Quest
     name: TestQuest
     startscene: start
     markers:
-      - name: PortalLever
+      -
+        name: PortalLever
         pos: 15,2,15
-    scenes
-      - name: start
+    scenes:
+      -
+        name: start
         triggers:
           -
             type: SceneInitialized
