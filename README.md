@@ -63,12 +63,12 @@ Minecraft-Bukkit-Quest
       - index: <index>
       - [mode: full|mixed|reverse]
       - [pos: <x>,<y>,<z>]
-    * fillRegion
+    * fillBlocks
       - material: <MaterialName|MaterialID>
       - data: <Data>
       - from: <x>,<y>,<z>
       - [to: <x>,<y>,<z>]
-    * generateRegion
+    * generateBlocks
       - generator: <GeneratorName>
       - from: <x>,<y>,<z>
       - [to: <x>,<y>,<z>]
