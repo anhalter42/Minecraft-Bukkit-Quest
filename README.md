@@ -44,30 +44,42 @@ Minecraft-Bukkit-Quest
                   type: activateLever
                   pos: PortalLever
 
-Trigger
-=======
-* SceneInitialized
-* PlayerEnteredRegion
-  - from: <x>,<y>,<z>
-  - [to: <x>,<y>,<z>]
+    Trigger
+    =======
+    * SceneInitialized
+    * PlayerEnteredRegion
+      - from: <x>,<y>,<z>
+      - [to: <x>,<y>,<z>]
   
-* TimerLapsed
-  - name: <name>
+    * TimerLapsed
+      - name: <name>
 
-Actions
-=======
+    Actions
+    =======
 
-* startScene
-  - name: <name>
-* loadFrame
-  - index: <index>
-  - [mode: full|mixed|reverse]
-  - [pos: <x>,<y>,<z>]
-    fillRegion <Material> <Data> <x>,<y>,<z> [<x>,<y>,<z>]
-    generateRegion <Generator> <x>,<y>,<z> [<x>,<y>,<z>]
-    startTimer <name> <ticks>
-    stopTimer <name>
-    continueTimer <name>
-    toggleLever <x>,<y>,<z>
-    activateLever <x>,<y>,<z>
-    deactivateLever <x>,<y>,<z>
+    * startScene
+      - name: <name>
+    * loadFrame
+      - index: <index>
+      - [mode: full|mixed|reverse]
+      - [pos: <x>,<y>,<z>]
+    * fillRegion
+      - material: <MaterialName|MaterialID>
+      - data: <Data>
+      - from: <x>,<y>,<z>
+      - [to: <x>,<y>,<z>]
+    * generateRegion
+      - generator: <GeneratorName>
+      - from: <x>,<y>,<z>
+      - [to: <x>,<y>,<z>]
+    * startTimer
+      - name: <name>
+      - ticks: <ticks>
+    * stopTimer
+      - name: <name>
+      - reset: <true|false>
+    * continueTimer
+      - name: <name>
+    * setLever
+      - pos: <x>,<y>,<z>
+      - [mode: <toggle|activate|deactivate>]
