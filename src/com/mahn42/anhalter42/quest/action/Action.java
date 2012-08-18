@@ -16,7 +16,7 @@ public class Action extends QuestObject{
     public static void register() {
         Quest.actionTypes.put("action", Action.class);
         Quest.actionTypes.put("loadFrame", LoadFrame.class);
-        Quest.actionTypes.put("activateLever", ActivateLever.class);
+        Quest.actionTypes.put("setLever", SetLever.class);
         Quest.actionTypes.put("startScene", StartScene.class);
         Quest.actionTypes.put("startTimer", StartTimer.class);
         Quest.actionTypes.put("stopTimer", StopTimer.class);
