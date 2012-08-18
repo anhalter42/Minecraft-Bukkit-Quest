@@ -50,7 +50,6 @@ Minecraft-Bukkit-Quest
     * PlayerEnteredRegion
       - from: <x>,<y>,<z>
       - [to: <x>,<y>,<z>]
-  
     * TimerLapsed
       - name: <name>
 
