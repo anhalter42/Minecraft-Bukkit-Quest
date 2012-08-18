@@ -4,13 +4,13 @@
  */
 package com.mahn42.anhalter42.quest.trigger;
 
-import com.mahn42.anhalter42.quest.action.Action;
 import com.mahn42.anhalter42.quest.Quest;
 import com.mahn42.anhalter42.quest.QuestObject;
+import com.mahn42.anhalter42.quest.QuestPlugin;
+import com.mahn42.anhalter42.quest.action.Action;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -22,6 +22,7 @@ public class Trigger extends QuestObject {
         Quest.triggerTypes.put("Trigger", Trigger.class);
         Quest.triggerTypes.put("SceneInitialized", SceneInitialized.class);
         Quest.triggerTypes.put("PlayerEnteredRegion", PlayerEnteredRegion.class);
+        Quest.triggerTypes.put("TimerLapsed", TimerLapsed.class);
     }
 
     public String type;
@@ -40,10 +41,10 @@ public class Trigger extends QuestObject {
                         lAction.fromSectionValue(lItem);
                         actions.add(lAction);
                     } catch (Exception ex) {
-                        Logger.getLogger("xxx").log(Level.SEVERE, null, ex);
+                        QuestPlugin.plugin.getLogger().log(Level.SEVERE, null, ex);
                     }
                 } else {
-                    Logger.getLogger("xxx").info("unkown action type " + lType);
+                    quest.log("unkown action type " + lType);
                 }
             }
         }
@@ -57,5 +58,12 @@ public class Trigger extends QuestObject {
     
     public boolean check() {
         return false;
+    }
+    
+    public void executeActions() {
+        for(Action lAction : actions) {
+            quest.log("action " + lAction.type + " executed.");
+            lAction.execute();
+        }
     }
 }

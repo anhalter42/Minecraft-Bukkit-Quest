@@ -24,12 +24,14 @@ public class Quest extends QuestObject {
     
     /* Runtime */
     public World world = null;
-    public ArrayList<Player> players = new ArrayList<Player>();
+    public ArrayList<String> players = new ArrayList<String>();
     public Scene currentScene = null;
     public SyncBlockList syncList = null;
     public BlockPosition edge1 = new BlockPosition();
     public BlockPosition edge2 = new BlockPosition();
     public BlockAreaList frames = new BlockAreaList();
+    public boolean stopped = false;
+    public HashMap<String, Object> objects = new HashMap<String, Object>();
     
     /* Meta */
     public ArrayList<Scene> scenes = new ArrayList<Scene>();
@@ -92,6 +94,11 @@ public class Quest extends QuestObject {
         for(Scene lScene : scenes) {
             lScene.initilize();
         }
+        for(Object lObject : objects.entrySet()) {
+            if (lObject instanceof QuestObject) {
+                ((QuestObject)lObject).quest = this;
+            }
+        }
         if (startScene != null) {
             currentScene = getScene(startScene);
         }
@@ -99,7 +106,41 @@ public class Quest extends QuestObject {
     
     public void run() {
         if (currentScene != null) {
+            for(Object lObject : objects.values()) {
+                if (lObject instanceof QuestObject) {
+                    ((QuestObject)lObject).quest = this;
+                }
+                if (lObject instanceof IQuestTick) {
+                    ((IQuestTick)lObject).tick();
+                }
+            }
             currentScene.run();
+        } else {
+            stop();
+        }
+    }
+
+    public void stop() {
+        stopped = true;
+        log("Quest " + name + " stopped.");
+    }
+
+    public void finish() {
+    }
+    
+    public void log(String aText) {
+        QuestPlugin.plugin.getLogger().info("Quest '" + name + "' '" + (currentScene == null ? "null" : currentScene.name) + "':" + aText);
+    }
+    
+    public Player getPlayer(String aName) {
+        return QuestPlugin.plugin.getServer().getPlayer(aName);
+    }
+
+    public Player getPlayer(int aNumber) {
+        if (aNumber < players.size()) {
+            return getPlayer(players.get(aNumber));
+        } else {
+            return null;
         }
     }
 }

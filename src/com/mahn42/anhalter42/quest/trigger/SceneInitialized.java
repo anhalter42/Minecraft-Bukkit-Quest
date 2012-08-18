@@ -10,4 +10,9 @@ package com.mahn42.anhalter42.quest.trigger;
  */
 public class SceneInitialized extends Trigger {
     
+    @Override
+    public boolean check() {
+        return quest.currentScene.ticks == 1;
+    }
+    
 }

@@ -8,14 +8,16 @@ import com.mahn42.anhalter42.quest.trigger.Trigger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author andre
  */
 public class Scene extends QuestObject {
-    
+
+    // RUNTIME
+    public int ticks = 0;
+    // META
     public String name = "";
     public ArrayList<Trigger> triggers = new ArrayList<Trigger>();
 
@@ -32,10 +34,10 @@ public class Scene extends QuestObject {
                         lTrigger.fromSectionValue(lItem);
                         triggers.add(lTrigger);
                     } catch (Exception ex) {
-                        Logger.getLogger("xxx").log(Level.SEVERE, null, ex);
+                        QuestPlugin.plugin.getLogger().log(Level.SEVERE, null, ex);
                     }
                 } else {
-                    Logger.getLogger("xxx").info("unkown trigger type " + lType);
+                    quest.log("unkown trigger type " + lType);
                 }
             }
         }
@@ -48,5 +50,12 @@ public class Scene extends QuestObject {
     }
     
     public void run() {
+        ticks++;
+        for(Trigger lTrigger : triggers) {
+            if (lTrigger.check()) {
+                quest.log("trigger " + lTrigger.type + " activated!");
+                lTrigger.executeActions();
+            }
+        }
     }
 }
