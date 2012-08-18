@@ -41,8 +41,9 @@ Minecraft-Bukkit-Quest
               to:   20,1,20
               actions:
                 -
-                  type: activateLever
+                  type: setLever
                   pos: PortalLever
+                  mode: on
 
     Trigger
     =======
@@ -81,4 +82,4 @@ Minecraft-Bukkit-Quest
       - name: <name>
     * setLever
       - pos: <x>,<y>,<z>
-      - [mode: <toggle|activate|deactivate>]
+      - [mode: <toggle|on|off>]
