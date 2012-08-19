@@ -83,3 +83,9 @@ Minecraft-Bukkit-Quest
     * setLever
       - pos: <x>,<y>,<z>
       - [mode: <toggle|on|off>]
+
+    Generators
+    ==========
+    
+    for generateBlocks
+    * Randomizer
