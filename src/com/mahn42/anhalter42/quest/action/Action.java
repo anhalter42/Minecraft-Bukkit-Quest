@@ -21,6 +21,7 @@ public class Action extends QuestObject{
         Quest.actionTypes.put("startTimer", StartTimer.class);
         Quest.actionTypes.put("stopTimer", StopTimer.class);
         Quest.actionTypes.put("fillBlocks", FillBlocks.class);
+        Quest.actionTypes.put("generateBlocks", GenerateBlocks.class);
     }
 
     public String type;

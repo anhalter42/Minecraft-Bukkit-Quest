@@ -5,6 +5,7 @@
 package com.mahn42.anhalter42.quest;
 
 import com.mahn42.anhalter42.quest.action.Action;
+import com.mahn42.anhalter42.quest.action.GenerateBlocks;
 import com.mahn42.anhalter42.quest.trigger.Trigger;
 import java.io.File;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class QuestPlugin extends JavaPlugin {
     public static void main(String[] args) {
         Trigger.register();
         Action.register();
+        GenerateBlocks.register();
         Quest lQuest = new Quest();
         lQuest.load(new File("/Users/andre/craftbukkit/test.quest.yml"));
         //lQuest.run();
@@ -34,6 +36,7 @@ public class QuestPlugin extends JavaPlugin {
         plugin = this;
         Trigger.register();
         Action.register();
+        GenerateBlocks.register();
         getCommand("q_start").setExecutor(new CommandQuestStart());
         getCommand("q_stop").setExecutor(new CommandQuestStop());
     }

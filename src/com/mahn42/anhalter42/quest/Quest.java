@@ -43,6 +43,7 @@ public class Quest extends QuestObject {
     /* Static */
     public static HashMap<String, Class> actionTypes = new HashMap<String, Class>();
     public static HashMap<String, Class> triggerTypes = new HashMap<String, Class>();
+    public static HashMap<String, Class> generatorTypes = new HashMap<String, Class>();
     
     public Quest() {
         quest = this;
