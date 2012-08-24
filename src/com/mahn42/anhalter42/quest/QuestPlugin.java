@@ -6,9 +6,12 @@ package com.mahn42.anhalter42.quest;
 
 import com.mahn42.anhalter42.quest.action.Action;
 import com.mahn42.anhalter42.quest.action.GenerateBlocks;
+import com.mahn42.anhalter42.quest.generator.Maze;
+import com.mahn42.anhalter42.quest.generator.Maze.Cell;
 import com.mahn42.anhalter42.quest.trigger.Trigger;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -25,8 +28,47 @@ public class QuestPlugin extends JavaPlugin {
         Trigger.register();
         Action.register();
         GenerateBlocks.register();
-        Quest lQuest = new Quest();
-        lQuest.load(new File("/Users/andre/craftbukkit/test.quest.yml"));
+        Maze lMaze = new Maze(10, 3, 10);
+        lMaze.build();
+        for(int y=0; y<3; y++) {
+            String lDump = "";
+            for(int z=0;z<10;z++) {
+                String lStr1 = "";
+                String lStr2 = "";
+                String lStr3 = "";
+                for(int x=0;x<10;x++) {
+                    Cell lCell = lMaze.get(x, y, z);
+                    if (lCell.links[2].broken) {
+                        lStr2 += " ";
+                    } else {
+                        lStr2 += "|";
+                    }
+                    lStr2 += " ";
+                    if (lCell.links[3].broken) {
+                        lStr2 += " ";
+                    } else {
+                        lStr2 += "|";
+                    }
+                    if (lCell.links[4].broken) {
+                        lStr1 += "   ";
+                    } else {
+                        lStr1 += "+-+";
+                    }
+                    if (lCell.links[5].broken) {
+                        lStr3 += "   ";
+                    } else {
+                        lStr3 += "+-+";
+                    }
+                }
+                lDump += "\n" + lStr1 + "\n" + lStr2 + "\n" + lStr3;
+                //Logger.getLogger("x").info(lStr1);
+                //Logger.getLogger("x").info(lStr2);
+                //Logger.getLogger("x").info(lStr3);
+            }
+            Logger.getLogger("x").info(lDump);
+        }
+        //Quest lQuest = new Quest();
+        //lQuest.load(new File("/Users/andre/craftbukkit/test.quest.yml"));
         //lQuest.run();
     }
     
