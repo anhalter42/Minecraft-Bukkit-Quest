@@ -35,6 +35,19 @@ Minecraft-Bukkit-Quest
                 -
                   type: loadFrame
                   index: 1
+                -
+                  type: generateBlocks
+                  from: 10,3,10
+                  to: 40,20,40
+                  generator: 
+                    type: Lobster
+                    wallThickness: 1
+                    corridorHeight: 3
+                    corridorWidth: 2
+                    baseMaterial: "121"     
+                    placeLadders: true 
+                    placeTorches: true 
+                    chanceForUpDown: 5 
             -
               type: PlayerEnteredRegion
               from: 10,1,10
@@ -89,3 +102,13 @@ Minecraft-Bukkit-Quest
     
     for generateBlocks
     * Randomizer
+    * Lobster
+      - corridorWidth: <width> // def = 1
+      - corridorHeight: <height> // def = 2
+      - borderThickness: <thickness> // def = 1
+      - wallThickness: <thickness> // def = 1
+      - baseMaterial: <materialname>|<materialid> // def = SMOOTH_BRICK
+      - baseMaterialData: <rawmetadata> // def = 3
+      - placeTorches: <true|false> // def = true
+      - placeLadders: <true|false> // def = true
+      - chanceForUpDown: <0..100> // def = 50 means half so often use up down in maze
