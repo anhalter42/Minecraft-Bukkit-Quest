@@ -49,6 +49,13 @@ public class Maze {
     public int depth;
     public Cell[] cells;
     
+    public static int DirectionTop      = 0;
+    public static int DirectionBottom   = 1;
+    public static int DirectionRight    = 2;
+    public static int DirectionLeft     = 3;
+    public static int DirectionForward  = 4;
+    public static int DirectionBackward = 5;
+
     protected int[] fDx = new int[6];
     protected int[] fDy = new int[6];
     protected int[] fDz = new int[6];
@@ -72,6 +79,10 @@ public class Maze {
 
     public int getDeltaZ(int aMazeDirection) {
         return fDz[aMazeDirection];
+    }
+    
+    public int getReverseDirection(int aMazeDirection) {
+        return fRev[aMazeDirection];
     }
 
     public Maze(int aWidth, int aHeight, int aDepth) {

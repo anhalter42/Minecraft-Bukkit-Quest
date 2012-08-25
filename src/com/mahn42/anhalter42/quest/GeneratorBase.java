@@ -12,7 +12,7 @@ import com.mahn42.framework.SyncBlockList;
  *
  * @author andre
  */
-public class GeneratorBase implements IGenerator {
+public class GeneratorBase extends QuestObject implements IGenerator {
 
     protected BlockPosition from;
     protected BlockPosition to;
