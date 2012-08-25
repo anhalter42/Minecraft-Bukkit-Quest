@@ -32,6 +32,7 @@ public class Lobster extends GeneratorBase{
     public byte baseMaterialData = (byte)3;
     public boolean placeTorches = true;
     public boolean placeLadders = true;
+    public int chanceForUpDown = 50;
     
     @Override
     public void initialize(BlockPosition aFrom, BlockPosition aTo) {
@@ -44,6 +45,7 @@ public class Lobster extends GeneratorBase{
             fMat = Material.getMaterial(Integer.parseInt(baseMaterial));
         }
         fMaze = new Maze(lMazeWidth, lMazeHeight, lMazeDepth);
+        fMaze.chanceForUpDown = chanceForUpDown;
         quest.log("Lobster: cw=" + corridorWidth + " ch=" + corridorHeight + " wt=" + wallThickness + " bt=" + borderThickness);
         quest.log("Area: w=" + width + " h=" + height + " d=" + depth);
         quest.log("Maze: w=" + lMazeWidth + " h=" + lMazeHeight + " d=" + lMazeDepth);
@@ -143,7 +145,7 @@ public class Lobster extends GeneratorBase{
             for(int x=0; x<fMaze.width; x++) {
                 for(int y=0; y<fMaze.height; y++) {
                     for(int z=0; z<fMaze.depth; z++) {
-                        Maze.Cell lCell = fMaze.get(x, y, z);
+                        //Maze.Cell lCell = fMaze.get(x, y, z);
                         if (lRnd.nextBoolean()) {
                             BlockAreaItem lItem = area.get(getX(x), getY(y), getZ(z));
                             lItem.id = Material.TORCH.getId();
@@ -183,6 +185,20 @@ public class Lobster extends GeneratorBase{
                 }
             }
         }
+        int fStats[] = new int[6]; fStats[0]=fStats[1]=fStats[2]=fStats[3]=fStats[4]=fStats[5]=0;
+        for(int x=0; x<fMaze.width; x++) {
+            for(int y=0; y<fMaze.height; y++) {
+                for(int z=0; z<fMaze.depth; z++) {
+                    Maze.Cell lCell = fMaze.get(x, y, z);
+                    for(int d=0; d<6;d++) {
+                        if (lCell.links[d].broken) {
+                            fStats[d]++;
+                        }
+                    }
+                }
+            }
+        }
+        quest.log("0=" + fStats[0] + " 1=" + fStats[1] + " 2=" + fStats[2] + " 3=" + fStats[3] + " 4=" + fStats[4] + " 5=" + fStats[5]);
         area.toList(aSyncList, from, BlockArea.BlockAreaPlaceMode.full);
     }
     

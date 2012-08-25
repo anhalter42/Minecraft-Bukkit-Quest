@@ -47,6 +47,7 @@ public class Maze {
     public int width;
     public int height;
     public int depth;
+    public int chanceForUpDown = 50; // 50%
     public Cell[] cells;
     
     public static int DirectionTop      = 0;
@@ -217,17 +218,31 @@ public class Maze {
         int lVisitedCells = 1;
         int lTotalCells = width * height * depth;
         ArrayList<Link> lNeighbors = new ArrayList<Link>();
+        ArrayList<Link> lNeighborXZs = new ArrayList<Link>();
         lCurrent.visited = true;
         while (lVisitedCells < lTotalCells) {
             lNeighbors.clear();
+            lNeighborXZs.clear();
             for(int d=0; d<6; d++) {
                 Link lNeighbor = lCurrent.links[d];;
                 if (lNeighbor.breakable && !lNeighbor.to(lCurrent).visited) {
                     lNeighbors.add(lNeighbor);
+                    if (d > 1) {
+                        lNeighborXZs.add(lNeighbor);
+                    }
                 }
             }
             if (!lNeighbors.isEmpty()) {
-                Link lLink = lNeighbors.get(lRnd.nextInt(lNeighbors.size()));
+                Link lLink;
+                if (chanceForUpDown >= 100) {
+                    lLink = lNeighbors.get(lRnd.nextInt(lNeighbors.size()));
+                } else {
+                    if (lNeighborXZs.isEmpty() || (lRnd.nextInt(200) < chanceForUpDown)) {
+                        lLink = lNeighbors.get(lRnd.nextInt(Math.min(1,lNeighbors.size())));
+                    } else {
+                        lLink = lNeighborXZs.get(lRnd.nextInt(lNeighborXZs.size()));
+                    }
+                }
                 Cell lNext = lLink.to(lCurrent);
                 lLink.broken = true;
                 lStack.push(lCurrent);
