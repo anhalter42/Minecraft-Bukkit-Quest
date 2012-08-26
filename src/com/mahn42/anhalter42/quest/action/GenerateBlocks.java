@@ -49,7 +49,7 @@ public class GenerateBlocks extends Action {
                 quest.log("unkown generator description!");
             }
         }
-        quest.log("generator " + generator);
+        //quest.log("generator " + generator);
     }
 
     protected void createGenerator() {

@@ -11,6 +11,7 @@ import com.mahn42.framework.BlockPosition;
 import com.mahn42.framework.SyncBlockList;
 import java.util.Random;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 /**
  *
@@ -18,6 +19,18 @@ import org.bukkit.Material;
  */
 public class Lobster extends GeneratorBase{
 
+    public class Mat {
+        public Material material;
+        public int chanceToUse = 100;
+    }
+    
+    public class ChestItem { 
+        public Material material;
+        public int amount = 1;
+        public int maxAmount = 1;
+        public int chanceToUse = 100;
+    }
+    
     // RUNTIME
     protected Maze fMaze;
     protected Material fMat;
@@ -28,11 +41,17 @@ public class Lobster extends GeneratorBase{
     public int corridorHeight = 2;
     public int borderThickness = 1;
     public int wallThickness = 1;
+    public boolean UpDownUseCorridorWidth = false;
     public String baseMaterial = "SMOOTH_BRICK";
     public byte baseMaterialData = (byte)3;
     public boolean placeTorches = true;
     public boolean placeLadders = true;
+    public boolean placeChests = true;
+    public boolean placeWoodenDoors = true;
     public int chanceForUpDown = 50;
+    public int chanceForTorches = 50;
+    public int chanceForChests = 50;
+    public int chanceForWoodenDoors = 10;
     
     @Override
     public void initialize(BlockPosition aFrom, BlockPosition aTo) {
@@ -46,9 +65,9 @@ public class Lobster extends GeneratorBase{
         }
         fMaze = new Maze(lMazeWidth, lMazeHeight, lMazeDepth);
         fMaze.chanceForUpDown = chanceForUpDown;
-        quest.log("Lobster: cw=" + corridorWidth + " ch=" + corridorHeight + " wt=" + wallThickness + " bt=" + borderThickness);
-        quest.log("Area: w=" + width + " h=" + height + " d=" + depth);
-        quest.log("Maze: w=" + lMazeWidth + " h=" + lMazeHeight + " d=" + lMazeDepth);
+        //quest.log("Lobster: cw=" + corridorWidth + " ch=" + corridorHeight + " wt=" + wallThickness + " bt=" + borderThickness);
+        //quest.log("Area: w=" + width + " h=" + height + " d=" + depth);
+        //quest.log("Maze: w=" + lMazeWidth + " h=" + lMazeHeight + " d=" + lMazeDepth);
     }
     
     public int getX(int aMazeX) {
@@ -97,11 +116,17 @@ public class Lobster extends GeneratorBase{
                 }
             }
         } else {
-            for(int wz=0; wz<corridorWidth;wz++) {
-                for(int wx=0; wx<corridorWidth;wx++) {
-                    for(int w=1; w<=wallThickness;w++) {
-                        area.get(getX(aMazeX) + wx, getY(aMazeY) + lDy*w, getZ(aMazeZ) + wz).id = Material.AIR.getId();
+            if (UpDownUseCorridorWidth) {
+                for(int wz=0; wz<corridorWidth;wz++) {
+                    for(int wx=0; wx<corridorWidth;wx++) {
+                        for(int w=1; w<=wallThickness;w++) {
+                            area.get(getX(aMazeX) + wx, getY(aMazeY) + lDy*w, getZ(aMazeZ) + wz).id = Material.AIR.getId();
+                        }
                     }
+                }
+            } else {
+                for(int w=1; w<=wallThickness;w++) {
+                    area.get(getX(aMazeX), getY(aMazeY) + lDy*w, getZ(aMazeZ)).id = Material.AIR.getId();
                 }
             }
         }
@@ -111,12 +136,6 @@ public class Lobster extends GeneratorBase{
     {
         fMazeToLadderDirs[0] = 0; // y+ up down not working
         fMazeToLadderDirs[1] = 0; // y- up down not working
-        /*
-        fMazeToLadderDirs[2] = 5; // x+ 
-        fMazeToLadderDirs[3] = 4; // x-
-        fMazeToLadderDirs[4] = 3; // z+
-        fMazeToLadderDirs[5] = 2; // z-
-        */
         fMazeToLadderDirs[2] = 4; // x+ 
         fMazeToLadderDirs[3] = 5; // x-
         fMazeToLadderDirs[4] = 2; // z+
@@ -145,11 +164,13 @@ public class Lobster extends GeneratorBase{
             for(int x=0; x<fMaze.width; x++) {
                 for(int y=0; y<fMaze.height; y++) {
                     for(int z=0; z<fMaze.depth; z++) {
-                        //Maze.Cell lCell = fMaze.get(x, y, z);
-                        if (lRnd.nextBoolean()) {
-                            BlockAreaItem lItem = area.get(getX(x), getY(y), getZ(z));
-                            lItem.id = Material.TORCH.getId();
-                            lItem.data = (byte)5;
+                        Maze.Cell lCell = fMaze.get(x, y, z);
+                        if (!lCell.links[Maze.DirectionBottom].broken) {
+                            if (lRnd.nextInt(100) < chanceForTorches) {
+                                BlockAreaItem lItem = area.get(getX(x), getY(y), getZ(z));
+                                lItem.id = Material.TORCH.getId();
+                                lItem.data = (byte)5;
+                            }
                         }
                     }
                 }
@@ -185,6 +206,58 @@ public class Lobster extends GeneratorBase{
                 }
             }
         }
+        if (placeChests) {
+            Random lRnd = new Random();
+            for(int x=0; x<fMaze.width; x++) {
+                for(int y=0; y<fMaze.height; y++) {
+                    for(int z=0; z<fMaze.depth; z++) {
+                        Maze.Cell lCell = fMaze.get(x, y, z);
+                        if (!lCell.links[Maze.DirectionTop].broken
+                                && !lCell.links[Maze.DirectionBottom].broken) {
+                            int lBCount = 0;
+                            int lFDir = 0;
+                            for (int d=2;d<6;d++) {
+                                if (lCell.links[d].broken) {
+                                    lBCount++;
+                                } else {
+                                    lFDir = d;
+                                }
+                            }
+                            if (lBCount < 2 && lRnd.nextInt(100) < chanceForChests) {
+                                BlockAreaItem lItem = area.get(getX(x), getY(y), getZ(z));
+                                lItem.id = Material.CHEST.getId();
+                                lItem.data = (byte)fMazeToLadderDirs[lFDir];
+                                lItem.itemStacks = new ItemStack[1];
+                                lItem.itemStacks[0] = new ItemStack(Material.GOLD_BLOCK, 1, (short)0, (byte)0);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        /*
+        if (placeWoodenDoors) {
+            Random lRnd = new Random();
+            for(int x=0; x<fMaze.width; x++) {
+                for(int y=0; y<fMaze.height; y++) {
+                    for(int z=0; z<fMaze.depth; z++) {
+                        Maze.Cell lCell = fMaze.get(x, y, z);
+                        if (!lCell.links[Maze.DirectionTop].broken
+                                && !lCell.links[Maze.DirectionBottom].broken) {
+                            if (lRnd.nextInt(100) < chanceForWoodenDoors) {
+                                BlockAreaItem lItem = area.get(getX(x), getY(y), getZ(z));
+                                lItem.id = Material.CHEST.getId();
+                                lItem.data = (byte)fMazeToLadderDirs[lFDir];
+                                lItem.itemStacks = new ItemStack[1];
+                                lItem.itemStacks[0] = new ItemStack(Material.GOLD_BLOCK, 1, (short)0, (byte)0);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        */
+        /*
         int fStats[] = new int[6]; fStats[0]=fStats[1]=fStats[2]=fStats[3]=fStats[4]=fStats[5]=0;
         for(int x=0; x<fMaze.width; x++) {
             for(int y=0; y<fMaze.height; y++) {
@@ -199,6 +272,7 @@ public class Lobster extends GeneratorBase{
             }
         }
         quest.log("0=" + fStats[0] + " 1=" + fStats[1] + " 2=" + fStats[2] + " 3=" + fStats[3] + " 4=" + fStats[4] + " 5=" + fStats[5]);
+        */
         area.toList(aSyncList, from, BlockArea.BlockAreaPlaceMode.full);
     }
     
