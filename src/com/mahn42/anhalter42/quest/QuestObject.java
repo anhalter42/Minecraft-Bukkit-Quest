@@ -61,8 +61,43 @@ public class QuestObject {
                             } else if (lValue instanceof HashMap) {
                                 //Logger.getLogger("xxx").info(lField.getType().toString());
                             } else {
-                                lField.set(this, lValues.get(lKey));
-                                Logger.getLogger("xxx").info(getClass().getSimpleName() + ":" + lKey + "=" + lValues.get(lKey));
+                                Class lDClass = lField.getType();
+                                lValue = lValues.get(lKey);
+                                if (lDClass.isAssignableFrom(lValue.getClass())) {
+                                    lField.set(this, lValue);
+                                    Logger.getLogger("xxx").info(getClass().getSimpleName() + ":" + lKey + "=" + lValues.get(lKey));
+                                } else {
+                                    if (lDClass.isAssignableFrom(String.class)) {
+                                        lField.set(this, lValue.toString());
+                                        Logger.getLogger("xxx").info(getClass().getSimpleName() + ":" + lKey + "=" + lValues.get(lKey));
+                                    } else if (lDClass.isAssignableFrom(int.class)) {
+                                        lField.setInt(this, Integer.parseInt(lValue.toString()));
+                                        Logger.getLogger("xxx").info(getClass().getSimpleName() + ":" + lKey + "=" + lValues.get(lKey));
+                                    } else if (lDClass.isAssignableFrom(Integer.class)) {
+                                        lField.setInt(this, Integer.parseInt(lValue.toString()));
+                                        Logger.getLogger("xxx").info(getClass().getSimpleName() + ":" + lKey + "=" + lValues.get(lKey));
+                                    } else if (lDClass.isAssignableFrom(short.class)) {
+                                        lField.setShort(this, Short.parseShort(lValue.toString()));
+                                        Logger.getLogger("xxx").info(getClass().getSimpleName() + ":" + lKey + "=" + lValues.get(lKey));
+                                    } else if (lDClass.isAssignableFrom(Short.class)) {
+                                        lField.setShort(this, Short.parseShort(lValue.toString()));
+                                        Logger.getLogger("xxx").info(getClass().getSimpleName() + ":" + lKey + "=" + lValues.get(lKey));
+                                    } else if (lDClass.isAssignableFrom(byte.class)) {
+                                        lField.setByte(this, Byte.parseByte(lValue.toString()));
+                                        Logger.getLogger("xxx").info(getClass().getSimpleName() + ":" + lKey + "=" + lValues.get(lKey));
+                                    } else if (lDClass.isAssignableFrom(Short.class)) {
+                                        lField.setByte(this, Byte.parseByte(lValue.toString()));
+                                        Logger.getLogger("xxx").info(getClass().getSimpleName() + ":" + lKey + "=" + lValues.get(lKey));
+                                    } else if (lDClass.isAssignableFrom(boolean.class)) {
+                                        lField.setBoolean(this, Boolean.parseBoolean(lValue.toString()));
+                                        Logger.getLogger("xxx").info(getClass().getSimpleName() + ":" + lKey + "=" + lValues.get(lKey));
+                                    } else if (lDClass.isAssignableFrom(Boolean.class)) {
+                                        lField.setBoolean(this, Boolean.parseBoolean(lValue.toString()));
+                                        Logger.getLogger("xxx").info(getClass().getSimpleName() + ":" + lKey + "=" + lValues.get(lKey));
+                                    } else {
+                                        Logger.getLogger("xxx").info(getClass().getSimpleName() + ":" + lKey + "=" + lValues.get(lKey) + " not assignable!!!");
+                                    }
+                                }
                             }
                         } catch (IllegalArgumentException ex) {
                             Logger.getLogger(Quest.class.getName()).log(Level.SEVERE, null, ex);
