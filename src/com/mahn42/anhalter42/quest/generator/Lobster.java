@@ -184,18 +184,18 @@ public class Lobster extends GeneratorBase{
     @Override
     public void initialize(BlockPosition aFrom, BlockPosition aTo) {
         super.initialize(aFrom, aTo);
-        int lMazeWidth = (width - (borderThickness*2)) / (corridorWidth+wallThickness); // rand + wände + gang
-        int lMazeDepth = (depth - (borderThickness*2)) / (corridorWidth+wallThickness); // rand + wände + gang
-        int lMazeHeight = ((height - (borderThickness*2)) / (corridorHeight+ceilingThickness)); // rand + wände + gänge hoch
+        int lMazeWidth = (width - (borderThickness*2+wallThickness)) / (corridorWidth+wallThickness); // rand + wände + gang
+        int lMazeDepth = (depth - (borderThickness*2+wallThickness)) / (corridorWidth+wallThickness); // rand + wände + gang
+        int lMazeHeight = ((height - (borderThickness*2+ceilingThickness)) / (corridorHeight+ceilingThickness)); // rand + wände + gänge hoch
         fMat = Material.getMaterial(baseMaterial.toUpperCase());
         if (fMat == null) {
             fMat = Material.getMaterial(Integer.parseInt(baseMaterial));
         }
         fMaze = new Maze(lMazeWidth, lMazeHeight, lMazeDepth);
         fMaze.chanceForUpDown = chanceForUpDown;
-        //quest.log("Lobster: cw=" + corridorWidth + " ch=" + corridorHeight + " wt=" + wallThickness + " bt=" + borderThickness);
-        //quest.log("Area: w=" + width + " h=" + height + " d=" + depth);
-        //quest.log("Maze: w=" + lMazeWidth + " h=" + lMazeHeight + " d=" + lMazeDepth);
+        quest.log("Lobster: cw=" + corridorWidth + " ch=" + corridorHeight + " wt=" + wallThickness + " bt=" + borderThickness);
+        quest.log("Area: w=" + width + " h=" + height + " d=" + depth);
+        quest.log("Maze: w=" + lMazeWidth + " h=" + lMazeHeight + " d=" + lMazeDepth);
     }
     
     public int getX(int aMazeX) {

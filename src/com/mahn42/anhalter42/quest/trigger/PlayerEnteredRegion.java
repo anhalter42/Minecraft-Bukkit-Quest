@@ -7,6 +7,7 @@ package com.mahn42.anhalter42.quest.trigger;
 import com.mahn42.anhalter42.quest.QuestPlugin;
 import com.mahn42.framework.BlockPosition;
 import java.util.ArrayList;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**

@@ -28,6 +28,8 @@ public class StoreArea extends Action {
     public String name;
     public BlockPosition from = new BlockPosition();
     public BlockPosition to = new BlockPosition();
+    public boolean withEntities = true;
+    public boolean withBuildings = true;
     
     @Override
     public void initialize() {
@@ -43,6 +45,12 @@ public class StoreArea extends Action {
     @Override
     public void execute() {
         BlockArea lArea = new BlockArea(quest.world, from, to);
+        if (!withEntities) {
+            lArea.entities.clear();
+        }
+        if (!withBuildings) {
+            lArea.buildings.clear();
+        }
         areas.put(name, new Item(from, lArea));
     }
 }

@@ -19,7 +19,7 @@ public class Timer extends QuestObject implements IQuestTick {
     public void tick() {
         if (enabled) {
             currentTicks++;
-            quest.log("timer " + currentTicks + " max " + maxTicks);
+            //quest.log("timer " + currentTicks + " max " + maxTicks);
             if (currentTicks >= maxTicks) {
                 raised = true;
             } else {
