@@ -48,6 +48,7 @@ public class Maze {
     public int height;
     public int depth;
     public int chanceForUpDown = 50; // 50%
+    //TODO public int chanceForBreakWalls = 0;
     public Cell[] cells;
     
     public static int DirectionTop      = 0;
@@ -143,17 +144,6 @@ public class Maze {
                         lLink.a = lCell;
                         lCell.links[5] = lLink;
                     }
-                    /*
-                    if (x==0 || y==0 || z==0 || x==(width-1) || y==(height-1) || z==(depth-1)) {
-                        for(int d=0; d<6; d++) {
-                            Link lLink = new Link();
-                            lLink.breakable = false;
-                            lLink.broken = false;
-                            lLink.isBorder = true;
-                            lLink.a = lCell;
-                            lCell.links[d] = lLink;
-                        }
-                    }*/
                     cells[x + width * y + (width * height) * z] = lCell;
                 }
 
@@ -257,5 +247,10 @@ public class Maze {
                 }
             }
         }
+        /** TODO break more walls to create cycles
+        if (chanceForBreakWalls > 0) {
+            
+        }
+        */
     }
 }

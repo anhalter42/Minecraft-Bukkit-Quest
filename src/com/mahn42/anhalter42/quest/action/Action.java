@@ -22,6 +22,9 @@ public class Action extends QuestObject{
         Quest.actionTypes.put("stopTimer", StopTimer.class);
         Quest.actionTypes.put("fillBlocks", FillBlocks.class);
         Quest.actionTypes.put("generateBlocks", GenerateBlocks.class);
+        Quest.actionTypes.put("storeArea", StoreArea.class);
+        Quest.actionTypes.put("restoreArea", RestoreArea.class);
+        Quest.actionTypes.put("stopQuest", StopQuest.class);
     }
 
     public String type;

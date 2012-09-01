@@ -151,11 +151,13 @@ public class Lobster extends GeneratorBase{
     public boolean placeTorches = true;
     public boolean placeLadders = true;
     public boolean placeChests = true;
-    public boolean placeWoodenDoors = true;
+    //TODO public boolean breakMoreWalls = true;
+    //TODO public int chanceForBreakWalls = 10;
+    //TODO public boolean placeWoodenDoors = true;
     public int chanceForUpDown = 50;
     public int chanceForTorches = 50;
     public int chanceForChests = 50;
-    public int chanceForWoodenDoors = 10;
+    //TODO public int chanceForWoodenDoors = 10;
     
     public MatList wallMaterials = new MatList();
     public MatList floorMaterials = new MatList();
@@ -419,7 +421,7 @@ public class Lobster extends GeneratorBase{
                 }
             }
         }
-        /*
+        /* TODO
         if (placeWoodenDoors) {
             Random lRnd = new Random();
             for(int x=0; x<fMaze.width; x++) {
@@ -441,7 +443,7 @@ public class Lobster extends GeneratorBase{
             }
         }
         */
-        /*
+        /* Statistics
         int fStats[] = new int[6]; fStats[0]=fStats[1]=fStats[2]=fStats[3]=fStats[4]=fStats[5]=0;
         for(int x=0; x<fMaze.width; x++) {
             for(int y=0; y<fMaze.height; y++) {

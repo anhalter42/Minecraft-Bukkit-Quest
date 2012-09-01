@@ -30,7 +30,7 @@ public class TimerLapsed extends Trigger {
         boolean lResult = false;
         Timer lTimer = (Timer)quest.objects.get(name);
         if (lTimer != null ) {
-            quest.log("timer " + name + " " + lTimer.currentTicks);
+            //quest.log("timer " + name + " " + lTimer.currentTicks);
             lResult = lTimer.raised;
             if (lResult) {
                 lTimer.disable();
