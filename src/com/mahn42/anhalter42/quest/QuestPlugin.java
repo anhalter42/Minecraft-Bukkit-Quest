@@ -12,6 +12,7 @@ import com.mahn42.anhalter42.quest.trigger.Trigger;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -20,6 +21,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class QuestPlugin extends JavaPlugin {
 
+    public int configQuestTaskTicks = 1;
+    
     public static QuestPlugin plugin;
     
     public ArrayList<QuestTask> tasks = new ArrayList<QuestTask>();
@@ -76,6 +79,7 @@ public class QuestPlugin extends JavaPlugin {
     @Override
     public void onEnable() { 
         plugin = this;
+        readQuestConfig();
         Trigger.register();
         Action.register();
         GenerateBlocks.register();
@@ -88,10 +92,17 @@ public class QuestPlugin extends JavaPlugin {
         getServer().getScheduler().cancelTasks(this);
     }
     
+    private void readQuestConfig() {
+        FileConfiguration lConfig = getConfig();
+        configQuestTaskTicks = lConfig.getInt("QuestTask.Ticks");
+    }
+    
+
+    
     public void startQuest(Quest aQuest) {
         QuestTask lTask = new QuestTask();
         lTask.quest = aQuest;
-        lTask.taskId = getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, lTask, 10, 10);
+        lTask.taskId = getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, lTask, 10, configQuestTaskTicks);
         tasks.add(lTask);
     }
     

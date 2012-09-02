@@ -25,6 +25,8 @@ public class Action extends QuestObject{
         Quest.actionTypes.put("storeArea", StoreArea.class);
         Quest.actionTypes.put("restoreArea", RestoreArea.class);
         Quest.actionTypes.put("stopQuest", StopQuest.class);
+        Quest.actionTypes.put("setSocialPoints", SetSocialPoints.class);
+        Quest.actionTypes.put("teleportPlayer", TeleportPlayer.class);
     }
 
     public String type;

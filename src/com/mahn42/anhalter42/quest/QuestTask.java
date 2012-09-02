@@ -27,13 +27,13 @@ public class QuestTask implements Runnable {
                     quest.initialze();
                     fInitialized = true;
                 }
-                quest.log("Task begin");
+                //quest.log("Task begin");
                 SyncBlockList lList = new SyncBlockList(quest.world);
                 quest.syncList = lList;
                 quest.run();
                 quest.syncList.execute();
                 quest.syncList = null;
-                quest.log("Task end");
+                //quest.log("Task end");
                 if (quest.stopped) {
                     stop();
                 }

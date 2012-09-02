@@ -6,15 +6,21 @@ package com.mahn42.anhalter42.quest;
 
 import com.mahn42.framework.BlockAreaList;
 import com.mahn42.framework.BlockPosition;
+import com.mahn42.framework.Framework;
+import com.mahn42.framework.RestrictedRegion;
 import com.mahn42.framework.SyncBlockList;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
  *
@@ -32,6 +38,7 @@ public class Quest extends QuestObject {
     public BlockAreaList frames = new BlockAreaList();
     public boolean stopped = false;
     public HashMap<String, Object> objects = new HashMap<String, Object>();
+    public RestrictedRegion restrictedRegion = new RestrictedRegion();
     
     /* Meta */
     public ArrayList<Scene> scenes = new ArrayList<Scene>();
@@ -39,6 +46,11 @@ public class Quest extends QuestObject {
     public String name;
     public String startScene;
     public BlockPosition startPos = new BlockPosition(0,0,0); // relative from player
+    public int width = 1;
+    public int height = 1;
+    public int depth = 1;
+    public int socialPoints = 1;
+    public boolean restrictRegion = true;
     
     /* Static */
     public static HashMap<String, Class> actionTypes = new HashMap<String, Class>();
@@ -60,6 +72,19 @@ public class Quest extends QuestObject {
         }
     }
     
+    public void setAllowedMaterialsFromSectionValue(Object aValue) {
+        if (aValue instanceof ArrayList) {
+            for(Object lItem : ((ArrayList)aValue)) {
+                Material lMat = Material.getMaterial(lItem.toString().toUpperCase());
+                if (lMat == null) {
+                    lMat = Material.getMaterial(Integer.parseInt(lItem.toString()));
+                }
+                quest.log("allowed material:" + lMat.name());
+                restrictedRegion.allowedMaterials.add(lMat);
+            }
+        }
+    }
+
     public void setScenesFromSectionValue(Object aValue) {
         if (aValue instanceof ArrayList) {
             for(Object lItem : ((ArrayList)aValue)) {
@@ -92,6 +117,15 @@ public class Quest extends QuestObject {
     }
     
     public void initialze() {
+        if (edge2.x == 0 && edge2.y == 0 && edge2.z == 0) {
+            edge2.cloneFrom(edge1);
+            edge2.add(width - 1, height - 1, depth - 1);
+        }
+        restrictedRegion.lowerEdge = edge1.clone();
+        restrictedRegion.upperEdge = edge2.clone();
+        if (restrictRegion) {
+            Framework.plugin.getRestrictedRegions(world, true).add(restrictedRegion);
+        }
         for(Scene lScene : scenes) {
             lScene.initilize();
         }
@@ -122,15 +156,30 @@ public class Quest extends QuestObject {
     }
 
     public void stop() {
-        stopped = true;
-        log("Quest " + name + " stopped.");
+        if (!stopped) {
+            if (restrictRegion) {
+                Framework.plugin.getRestrictedRegions(world, true).remove(restrictedRegion);
+            }
+            for(String lPlayerName:players) {
+                Framework.plugin.getPlayerManager().increaseSocialPoint(lPlayerName, "Quest", socialPoints, name, "");
+                Player lPlayer = Framework.plugin.getServer().getPlayer(lPlayerName);
+                int y = world.getHighestBlockYAt(lPlayer.getLocation());
+                Location lLoc = lPlayer.getLocation().clone();
+                lLoc.setY(y);
+                lPlayer.teleport(lLoc, PlayerTeleportEvent.TeleportCause.PLUGIN);
+            }
+            stopped = true;
+            log("Quest " + name + " stopped. (SP:" + socialPoints + ")");
+        }
     }
 
     public void finish() {
     }
     
     public void log(String aText) {
-        QuestPlugin.plugin.getLogger().info("Quest '" + name + "' '" + (currentScene == null ? "null" : currentScene.name) + "':" + aText);
+        if (Framework.plugin.isDebugSet("quest")) {
+            QuestPlugin.plugin.getLogger().info("Quest '" + name + "' '" + (currentScene == null ? "null" : currentScene.name) + "':" + aText);
+        }
     }
     
     public Player getPlayer(String aName) {
