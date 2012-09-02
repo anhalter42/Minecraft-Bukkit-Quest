@@ -27,6 +27,9 @@ public class Action extends QuestObject{
         Quest.actionTypes.put("stopQuest", StopQuest.class);
         Quest.actionTypes.put("setSocialPoints", SetSocialPoints.class);
         Quest.actionTypes.put("teleportPlayer", TeleportPlayer.class);
+        Quest.actionTypes.put("spawnEntity", SpawnEntity.class);
+        Quest.actionTypes.put("playEffect", PlayEffect.class);
+        Quest.actionTypes.put("createExplosion", CreateExplosion.class);
     }
 
     public String type;

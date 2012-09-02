@@ -5,7 +5,7 @@ version: 0.01
 commands:
    q_start:
       description: quest starten
-      usage: /q_start <questfile>
+      usage: /q_start <questfile|questdirectory>
       permission: q.start
       permission-message: You don't have permission
    q_stop:

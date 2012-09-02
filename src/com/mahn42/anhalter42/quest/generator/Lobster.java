@@ -23,15 +23,15 @@ import org.bukkit.inventory.ItemStack;
 public class Lobster extends GeneratorBase{
 
     public class Mat extends QuestObject {
-        protected Material mat;
+        protected Material material;
         public byte data = (byte)0;
         public int chanceToUse = 100;
         public int mazeLevel = -1; // allways
         public void setMaterialFromSectionValue(Object aValue) {
             String lStr = aValue.toString().toUpperCase();
-            mat = Material.getMaterial(lStr);
-            if (mat == null) {
-                mat = Material.getMaterial(Integer.parseInt(lStr));
+            material = Material.getMaterial(lStr);
+            if (material == null) {
+                material = Material.getMaterial(Integer.parseInt(lStr));
             }
         }
     }
@@ -42,7 +42,7 @@ public class Lobster extends GeneratorBase{
         public Mat getNext(int aMazeLevel) {
             Mat lResult = null;
             Mat lFound = new Mat();
-            lFound.mat = fMat;
+            lFound.material = fMat;
             lFound.data = baseMaterialData;
             for(Mat lMat : this) {
                 if (lMat.mazeLevel < 0 || lMat.mazeLevel == aMazeLevel) {
@@ -58,13 +58,14 @@ public class Lobster extends GeneratorBase{
             if (aValue instanceof ArrayList) {
                 for(Object lItem : ((ArrayList)aValue)) {
                     Mat lMat = new Mat();
+                    lMat.quest = quest;
                     if (lItem instanceof HashMap) {
                         lMat.fromSectionValue(lItem);
                     } else if (lItem instanceof String) {
                         String lStr = lItem.toString().toUpperCase();
-                        lMat.mat = Material.getMaterial(lStr);
-                        if (lMat.mat == null) {
-                            lMat.mat = Material.getMaterial(Integer.parseInt(lStr));
+                        lMat.material = Material.getMaterial(lStr);
+                        if (lMat.material == null) {
+                            lMat.material = Material.getMaterial(Integer.parseInt(lStr));
                         }
                     }
                     add(lMat);
@@ -119,6 +120,7 @@ public class Lobster extends GeneratorBase{
             if (aValue instanceof ArrayList) {
                 for(Object lItem : ((ArrayList)aValue)) {
                     ChestItem lMat = new ChestItem();
+                    lMat.quest = quest;
                     if (lItem instanceof HashMap) {
                         lMat.fromSectionValue(lItem);
                     } else if (lItem instanceof String) {
@@ -151,13 +153,13 @@ public class Lobster extends GeneratorBase{
     public boolean placeTorches = true;
     public boolean placeLadders = true;
     public boolean placeChests = true;
-    //TODO public boolean breakMoreWalls = true;
-    //TODO public int chanceForBreakWalls = 10;
-    //TODO public boolean placeWoodenDoors = true;
+    public boolean breakMoreWalls = false;
+    public int chanceForBreakWalls = 10;
+    public boolean placeWoodenDoors = false;
     public int chanceForUpDown = 50;
     public int chanceForTorches = 50;
     public int chanceForChests = 50;
-    //TODO public int chanceForWoodenDoors = 10;
+    public int chanceForWoodenDoors = 10;
     
     public MatList wallMaterials = new MatList();
     public MatList floorMaterials = new MatList();
@@ -193,6 +195,9 @@ public class Lobster extends GeneratorBase{
         }
         fMaze = new Maze(lMazeWidth, lMazeHeight, lMazeDepth);
         fMaze.chanceForUpDown = chanceForUpDown;
+        if (breakMoreWalls) {
+            fMaze.chanceForBreakWalls = chanceForBreakWalls;
+        }
         quest.log("Lobster: cw=" + corridorWidth + " ch=" + corridorHeight + " wt=" + wallThickness + " bt=" + borderThickness);
         quest.log("Area: w=" + width + " h=" + height + " d=" + depth);
         quest.log("Maze: w=" + lMazeWidth + " h=" + lMazeHeight + " d=" + lMazeDepth);
@@ -287,11 +292,11 @@ public class Lobster extends GeneratorBase{
                                 Mat lMat;
                                 lItem = area.get(xx+lx, yy-1, zz+lz);
                                 lMat = floorMaterials.getNext(y);
-                                lItem.id = lMat.mat.getId();
+                                lItem.id = lMat.material.getId();
                                 lItem.data = lMat.data;
                                 lItem = area.get(xx+lx, yy+corridorHeight, zz+lz);
                                 lMat = ceilingMaterials.getNext(y);
-                                lItem.id = lMat.mat.getId();
+                                lItem.id = lMat.material.getId();
                                 lItem.data = lMat.data;
                             }
                         }
@@ -301,11 +306,11 @@ public class Lobster extends GeneratorBase{
                                 Mat lMat;
                                 lItem = area.get(xx+lx, yy+ly, zz-1);
                                 lMat = wallMaterials.getNext(y);
-                                lItem.id = lMat.mat.getId();
+                                lItem.id = lMat.material.getId();
                                 lItem.data = lMat.data;
                                 lItem = area.get(xx+lx, yy+ly, zz+corridorWidth);
                                 lMat = wallMaterials.getNext(y);
-                                lItem.id = lMat.mat.getId();
+                                lItem.id = lMat.material.getId();
                                 lItem.data = lMat.data;
                             }
                             for(int lz=0;lz<corridorWidth;lz++) {
@@ -313,11 +318,11 @@ public class Lobster extends GeneratorBase{
                                 Mat lMat;
                                 lItem = area.get(xx-1, yy+ly, zz+lz);
                                 lMat = wallMaterials.getNext(y);
-                                lItem.id = lMat.mat.getId();
+                                lItem.id = lMat.material.getId();
                                 lItem.data = lMat.data;
                                 lItem = area.get(xx+corridorWidth, yy+ly, zz+lz);
                                 lMat = wallMaterials.getNext(y);
-                                lItem.id = lMat.mat.getId();
+                                lItem.id = lMat.material.getId();
                                 lItem.data = lMat.data;
                             }
                         }
@@ -421,7 +426,6 @@ public class Lobster extends GeneratorBase{
                 }
             }
         }
-        /* TODO
         if (placeWoodenDoors) {
             Random lRnd = new Random();
             for(int x=0; x<fMaze.width; x++) {
@@ -430,19 +434,37 @@ public class Lobster extends GeneratorBase{
                         Maze.Cell lCell = fMaze.get(x, y, z);
                         if (!lCell.links[Maze.DirectionTop].broken
                                 && !lCell.links[Maze.DirectionBottom].broken) {
-                            if (lRnd.nextInt(100) < chanceForWoodenDoors) {
-                                BlockAreaItem lItem = area.get(getX(x), getY(y), getZ(z));
-                                lItem.id = Material.CHEST.getId();
-                                lItem.data = (byte)fMazeToLadderDirs[lFDir];
-                                lItem.itemStacks = new ItemStack[1];
-                                lItem.itemStacks[0] = new ItemStack(Material.GOLD_BLOCK, 1, (short)0, (byte)0);
+                            for(int d=2;d<6;d++) {
+                                if (lCell.links[d].broken && lRnd.nextInt(100) < chanceForWoodenDoors) {
+                                    int lcx = fMaze.getDeltaX(d) > 0 ? corridorWidth : 0;
+                                    int lcz = fMaze.getDeltaZ(d) > 0 ? corridorWidth : 0;
+                                    int xx = getX(x);
+                                    int yy = getY(y);
+                                    int zz = getZ(z);
+                                    int lfx = fMaze.getDeltaZ(d) > 0 ? 1 : 0;
+                                    int lfz = fMaze.getDeltaX(d) > 0 ? 1 : 0;
+                                    for(int ld=0;ld<corridorWidth;ld++) {
+                                        for(int ly=0;ly<corridorHeight;ly++) {
+                                            if (ld > 0 || ly > 1) {
+                                                BlockAreaItem lItem = area.get(xx+lcx+lfx*ld,yy+ly,zz+lcz+lfz*ld);
+                                                Mat lMat = wallMaterials.getNext(y);
+                                                lItem.id =  lMat.material.getId();
+                                                lItem.data = lMat.data;
+                                            } else {
+                                                BlockAreaItem lItem = area.get(xx+lcx+lfx*ld,yy+ly,zz+lcz+lfz*ld);
+                                                lItem.id = Material.WOODEN_DOOR.getId();
+                                                lItem.data = (byte)(ly > 0 ? 8 : 0);
+                                            }
+                                        }
+                                    }
+                                    break;
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        */
         /* Statistics
         int fStats[] = new int[6]; fStats[0]=fStats[1]=fStats[2]=fStats[3]=fStats[4]=fStats[5]=0;
         for(int x=0; x<fMaze.width; x++) {

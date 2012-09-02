@@ -22,9 +22,13 @@ public class CommandQuestStart  implements CommandExecutor {
         if (aCommandSender instanceof Player) {
             Player lPlayer = (Player) aCommandSender;
             if (aStrings.length > 0) {
+                File lFile = new File(aStrings[0]);
+                if (lFile.isDirectory()) {
+                    lFile = new File(lFile.getPath() + File.separatorChar + "start.yml");
+                }
                 Quest lQuest = new Quest();
                 lQuest.world = lPlayer.getWorld();
-                lQuest.load(new File(aStrings[0]));
+                lQuest.load(lFile);
                 lQuest.edge1 = new BlockPosition(lPlayer.getLocation());
                 lQuest.edge1.subtract(lQuest.startPos);
                 QuestPlugin.plugin.startQuest(lQuest);
