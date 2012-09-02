@@ -1,6 +1,8 @@
 Minecraft-Bukkit-Quest
 ======================
 
+Beispiel Quest ist unter Downloads zu finden.
+
     quest:
       name: TestQuest
       startscene: start
