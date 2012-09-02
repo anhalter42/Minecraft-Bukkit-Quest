@@ -12,7 +12,7 @@ import org.bukkit.entity.EntityType;
  * @author andre
  */
 public class SpawnEntity extends Action {
-    public EntityType type = EntityType.PIG;
+    public EntityType entityType = EntityType.PIG;
     public BlockPosition to = new BlockPosition();
     public BlockPosition vector = new BlockPosition();
     public int amount = 1;
@@ -28,10 +28,10 @@ public class SpawnEntity extends Action {
     @Override
     public void execute() {
         for(int i=0;i<amount;i++) {
-            if (type == EntityType.ARROW) {
+            if (entityType == EntityType.ARROW) {
                 quest.world.spawnArrow(to.getLocation(quest.world), vector.getVector(), speed, spread);
             } else {
-                quest.world.spawnEntity(to.getLocation(quest.world), type);
+                quest.world.spawnEntity(to.getLocation(quest.world), entityType);
             }
         }
     }
