@@ -85,6 +85,7 @@ public class QuestPlugin extends JavaPlugin {
         GenerateBlocks.register();
         getCommand("q_start").setExecutor(new CommandQuestStart());
         getCommand("q_stop").setExecutor(new CommandQuestStop());
+        getCommand("q_gentest").setExecutor(new CommandGeneratorTest());
     }
 
     @Override

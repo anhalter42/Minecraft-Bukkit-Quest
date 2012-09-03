@@ -7,6 +7,7 @@ package com.mahn42.anhalter42.quest.action;
 import com.mahn42.anhalter42.quest.IGenerator;
 import com.mahn42.anhalter42.quest.Quest;
 import com.mahn42.anhalter42.quest.QuestObject;
+import com.mahn42.anhalter42.quest.generator.Checkerboard;
 import com.mahn42.anhalter42.quest.generator.Lobster;
 import com.mahn42.anhalter42.quest.generator.Randomizer;
 import com.mahn42.framework.BlockPosition;
@@ -23,6 +24,7 @@ public class GenerateBlocks extends Action {
     public static void register() {
         Quest.generatorTypes.put("Randomizer", Randomizer.class);
         Quest.generatorTypes.put("Lobster", Lobster.class);
+        Quest.generatorTypes.put("Checkerboard", Checkerboard.class);
     }
     
     // RUNTIME

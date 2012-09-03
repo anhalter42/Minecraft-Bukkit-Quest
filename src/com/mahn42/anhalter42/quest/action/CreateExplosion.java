@@ -14,7 +14,7 @@ import org.bukkit.Location;
 public class CreateExplosion extends Action {
     public BlockPosition to = new BlockPosition();
     public float power = 4;
-    public boolean setFire = true;
+    public boolean setFire = false;
 
     @Override
     public void initialize() {

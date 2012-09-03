@@ -13,15 +13,24 @@ commands:
       usage: /q_stop <questname>
       permission: q.stop
       permission-message: You don't have permission
+   q_gentest:
+      description: generator testen
+      usage: /q_gentest <generatorname> <width> <height> <depth>
+      permission: q.gentest
+      permission-message: You don't have permission
 permissions:
     q.*:
         description: Gives access to all quest commands
         children:
             q.start: true
             q.stop: true
+            q.gentest: true
     q.start:
         description: Allows you to start a quest from file
         default: false
     q.stop:
         description: Allows you to stop a running quest with given quest name
+        default: false
+    q.gentest:
+        description: Allows you to test generators for action generateBlocks
         default: false

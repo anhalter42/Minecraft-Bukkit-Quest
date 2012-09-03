@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -101,6 +102,13 @@ public class QuestObject {
                                         quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
                                     } else if (lDClass.isAssignableFrom(Float.class)) {
                                         lField.setFloat(this, Float.parseFloat(lValue.toString()));
+                                        quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
+                                    } else if (lDClass.isAssignableFrom(Material.class)) {
+                                        Material lMat = Material.getMaterial(lValue.toString().toUpperCase());
+                                        if (lMat == null) {
+                                            lMat = Material.getMaterial(Integer.parseInt(lValue.toString()));
+                                        }
+                                        lField.set(this, lMat);
                                         quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
                                     } else {
                                         quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue + " not assignable!!!");
