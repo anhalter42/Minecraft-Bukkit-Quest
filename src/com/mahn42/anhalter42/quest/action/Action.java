@@ -30,6 +30,7 @@ public class Action extends QuestObject{
         Quest.actionTypes.put("spawnEntity", SpawnEntity.class);
         Quest.actionTypes.put("playEffect", PlayEffect.class);
         Quest.actionTypes.put("createExplosion", CreateExplosion.class);
+        Quest.actionTypes.put("moveBlocks", MoveBlocks.class);
     }
 
     public String type;
