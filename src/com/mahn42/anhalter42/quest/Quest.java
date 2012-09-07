@@ -55,6 +55,7 @@ public class Quest extends QuestObject {
     public static HashMap<String, Class> actionTypes = new HashMap<String, Class>();
     public static HashMap<String, Class> triggerTypes = new HashMap<String, Class>();
     public static HashMap<String, Class> generatorTypes = new HashMap<String, Class>();
+    public static HashMap<String, QuestVariable> variables = new HashMap<String, QuestVariable>();
     
     public Quest() {
         quest = this;
@@ -106,6 +107,21 @@ public class Quest extends QuestObject {
         }
     }
 
+    public void setVariablesFromSectionValue(Object aValue) {
+        if (aValue instanceof ArrayList) {
+            for(Object lItem : ((ArrayList)aValue)) {
+                HashMap<String, String> lMap = (HashMap)lItem;
+                QuestVariable lVar = new QuestVariable();
+                lVar.name = lMap.get("name");
+                lVar.value = lMap.get("value");
+                if (lVar.value == null) {
+                    lVar.value = "0";
+                }
+                variables.put(lVar.name, lVar);
+            }
+        }
+    }
+
     public Scene getScene(String aName) {
         for(Scene lScene : scenes) {
             if (lScene.name.equals(aName)) {
@@ -113,6 +129,16 @@ public class Quest extends QuestObject {
             }
         }
         return null;
+    }
+    
+    public QuestVariable getVariable(String aName) {
+        QuestVariable lResult = variables.get(aName);
+        if (lResult == null) {
+            lResult = new QuestVariable();
+            lResult.name = aName;
+            variables.put(lResult.name, lResult);
+        }
+        return lResult;
     }
     
     public void initialze() {

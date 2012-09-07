@@ -23,6 +23,7 @@ public class Trigger extends QuestObject {
         Quest.triggerTypes.put("SceneInitialized", SceneInitialized.class);
         Quest.triggerTypes.put("PlayerEnteredRegion", PlayerEnteredRegion.class);
         Quest.triggerTypes.put("TimerLapsed", TimerLapsed.class);
+        Quest.triggerTypes.put("VariableReachedValue", VariableReachedValue.class);
     }
 
     public String type;

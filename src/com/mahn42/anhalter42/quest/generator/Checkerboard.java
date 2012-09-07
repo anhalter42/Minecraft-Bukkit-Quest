@@ -35,22 +35,30 @@ public class Checkerboard extends GeneratorBase {
     @Override
     public void execute(SyncBlockList aSyncList) {
         Random lRnd = new Random();
-        for(int x=0;x<width;x++) {
-            for(int y=0;y<height;y++) {
-                for(int z=0;z<depth;z++) {
+        for(int x=0;x<width;x+=blockSize) {
+            for(int y=0;y<height;y+=blockSize) {
+                for(int z=0;z<depth;z+=blockSize) {
+                    int lId;
+                    byte lData;
                     if (lRnd.nextInt(100) < chanceForError) {
-                        BlockAreaItem lItem = area.get(x, y, z);
-                        lItem.id = Material.AIR.getId();
-                        lItem.data = (byte)0;
+                        lId = Material.AIR.getId();
+                        lData = (byte)0;
                     } else {
-                        if (((x/blockSize) % 1) == 0 && ((z/blockSize) % 1) == 0 && ((y/blockSize) % 1) == 0) {
-                            BlockAreaItem lItem = area.get(x, y, z);
-                            lItem.id = blackMaterial.getId();
-                            lItem.data = blackMaterialData;
+                        if ((((x/blockSize) + (z/blockSize) + (y/blockSize)) % 2) == 0) {
+                            lId = blackMaterial.getId();
+                            lData = blackMaterialData;
                         } else {
-                            BlockAreaItem lItem = area.get(x, y, z);
-                            lItem.id = whiteMaterial.getId();
-                            lItem.data = whiteMaterialData;
+                            lId = whiteMaterial.getId();
+                            lData = whiteMaterialData;
+                        }
+                    }
+                    for(int bx=0;bx<blockSize;bx++) {
+                        for(int by=0;by<blockSize;by++) {
+                            for(int bz=0;bz<blockSize;bz++) {
+                                BlockAreaItem lItem = area.get(x+bx, y+by, z+bz);
+                                lItem.id = lId;
+                                lItem.data = lData;
+                            }
                         }
                     }
                 }
