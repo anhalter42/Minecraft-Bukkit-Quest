@@ -1,6 +1,9 @@
 Minecraft-Bukkit-Quest
 ======================
 
+Schaut bitte ins Wiki:
+https://github.com/anhalter42/Minecraft-Bukkit-Quest/wiki
+
 Beispiel Quest ist unter Downloads zu finden.
 
     quest:
