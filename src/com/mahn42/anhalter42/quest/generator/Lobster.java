@@ -136,6 +136,29 @@ public class Lobster extends GeneratorBase{
         }
     }
     
+    public class Passage extends QuestObject {
+        public BlockPosition pos = new BlockPosition();
+        public boolean up = false;
+        public boolean down = false;
+        public boolean right = false;
+        public boolean left = false;
+        public boolean forward = false;
+        public boolean backward = false;
+    }
+    
+    public class Passages extends ArrayList<Passage> {
+        public void fromSectionValue(Object aValue) {
+            if (aValue instanceof ArrayList) {
+                for(Object lItem : ((ArrayList)aValue)) {
+                    Passage lPas = new Passage();
+                    lPas.quest = quest;
+                    lPas.fromSectionValue(lItem);
+                    add(lPas);
+                }
+            }
+        }
+    }
+    
     // RUNTIME
     protected Maze fMaze;
     protected Material fMat;
@@ -146,7 +169,7 @@ public class Lobster extends GeneratorBase{
     public int borderThickness = 1;
     public int wallThickness = 1;
     public int ceilingThickness = 1;
-    public boolean UpDownUseCorridorWidth = false;
+    public boolean upDownUseCorridorWidth = false;
     public String baseMaterial = "SMOOTH_BRICK";
     public byte baseMaterialData = (byte)3;
     public boolean placeTorches = true;
@@ -159,12 +182,17 @@ public class Lobster extends GeneratorBase{
     public int chanceForTorches = 50;
     public int chanceForChests = 25;
     public int chanceForWoodenDoors = 5;
+    public boolean ceilingInTopLevel = true;
+    
+    public BlockArea.BlockAreaPlaceMode blockPlaceMode = BlockArea.BlockAreaPlaceMode.full;
     
     public MatList wallMaterials = new MatList();
     public MatList floorMaterials = new MatList();
     public MatList ceilingMaterials = new MatList();
     
     public ChestItems chestItems = new ChestItems();
+    
+    public Passages passages = new Passages();
     
     public void setWallMaterialsFromSectionValue(Object aValue) {
         wallMaterials.fromSectionValue(aValue);
@@ -182,12 +210,16 @@ public class Lobster extends GeneratorBase{
         chestItems.fromSectionValue(aValue);
     }
     
+    public void setPassagesFromSectionValue(Object aValue) {
+        passages.fromSectionValue(aValue);
+    }
+    
     @Override
     public void initialize(BlockPosition aFrom, BlockPosition aTo) {
         super.initialize(aFrom, aTo);
         int lMazeWidth = (width - (borderThickness*2+wallThickness)) / (corridorWidth+wallThickness); // rand + wände + gang
         int lMazeDepth = (depth - (borderThickness*2+wallThickness)) / (corridorWidth+wallThickness); // rand + wände + gang
-        int lMazeHeight = ((height - (borderThickness*2+ceilingThickness)) / (corridorHeight+ceilingThickness)); // rand + wände + gänge hoch
+        int lMazeHeight = ((height - (borderThickness*2+(ceilingInTopLevel?ceilingThickness:0))) / (corridorHeight+ceilingThickness)); // rand + wände + gänge hoch
         fMat = Material.getMaterial(baseMaterial.toUpperCase());
         if (fMat == null) {
             fMat = Material.getMaterial(Integer.parseInt(baseMaterial));
@@ -248,7 +280,7 @@ public class Lobster extends GeneratorBase{
                 }
             }
         } else {
-            if (UpDownUseCorridorWidth) {
+            if (upDownUseCorridorWidth) {
                 for(int wz=0; wz<corridorWidth;wz++) {
                     for(int wx=0; wx<corridorWidth;wx++) {
                         for(int w=1; w<=ceilingThickness;w++) {
@@ -335,6 +367,23 @@ public class Lobster extends GeneratorBase{
     public void execute(SyncBlockList aSyncList) {
         fMaze.build();
         initializeArea();
+        if (!ceilingInTopLevel) {
+            for(int x=0; x<fMaze.width; x++) {
+                for(int z=0; z<fMaze.depth; z++) {
+                    Maze.Cell lCell = fMaze.get(x, fMaze.height - 1, z);
+                    lCell.links[Maze.DirectionTop].broken = true;
+                }
+            }
+        }
+        for(Passage lPas : passages) {
+            Maze.Cell lCell = fMaze.get(lPas.pos.x, lPas.pos.y, lPas.pos.z);
+            if (lPas.up) lCell.links[Maze.DirectionTop].broken = true;
+            if (lPas.down) lCell.links[Maze.DirectionBottom].broken = true;
+            if (lPas.left) lCell.links[Maze.DirectionLeft].broken = true;
+            if (lPas.right) lCell.links[Maze.DirectionRight].broken = true;
+            if (lPas.forward) lCell.links[Maze.DirectionForward].broken = true;
+            if (lPas.backward) lCell.links[Maze.DirectionBackward].broken = true;
+        }
         for(int x=0; x<fMaze.width; x++) {
             for(int y=0; y<fMaze.height; y++) {
                 for(int z=0; z<fMaze.depth; z++) {
@@ -480,7 +529,7 @@ public class Lobster extends GeneratorBase{
         }
         quest.log("0=" + fStats[0] + " 1=" + fStats[1] + " 2=" + fStats[2] + " 3=" + fStats[3] + " 4=" + fStats[4] + " 5=" + fStats[5]);
         */
-        area.toList(aSyncList, from, BlockArea.BlockAreaPlaceMode.full);
+        area.toList(aSyncList, from, blockPlaceMode);
     }
     
 }

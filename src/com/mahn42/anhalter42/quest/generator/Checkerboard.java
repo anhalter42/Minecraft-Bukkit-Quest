@@ -26,6 +26,7 @@ public class Checkerboard extends GeneratorBase {
     public byte whiteMaterialData = WoolColors.white;
     public int chanceForError = 20;
     public int blockSize = 1;
+    public BlockArea.BlockAreaPlaceMode blockPlaceMode = BlockArea.BlockAreaPlaceMode.full;
     
     @Override
     public void initialize(BlockPosition aFrom, BlockPosition aTo) {
@@ -66,6 +67,6 @@ public class Checkerboard extends GeneratorBase {
                 }
             }
         }
-        area.toList(aSyncList, from, BlockArea.BlockAreaPlaceMode.full);
+        area.toList(aSyncList, from, blockPlaceMode);
     }
 }
