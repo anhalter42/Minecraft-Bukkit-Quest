@@ -18,6 +18,7 @@ public class GeneratorBase extends QuestObject implements IGenerator {
     protected BlockPosition to;
     protected int width, height, depth;
     protected BlockArea area;
+    public String type;
 
     @Override
     public void initialize(BlockPosition aFrom, BlockPosition aTo) {

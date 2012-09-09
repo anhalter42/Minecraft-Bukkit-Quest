@@ -33,16 +33,19 @@ public class QuestObject {
                 aValue = lVar.value;
             }
             String lMethodName = aName.substring(0, 1).toUpperCase() + aName.substring(1);
+            lMethodName = "set" + lMethodName + "FromSectionValue";
             try {
-                Method lMethod = lClass.getMethod("set" + lMethodName + "FromSectionValue", Object.class);
+                Method lMethod = lClass.getMethod(lMethodName, Object.class);
                 try {
                     lMethod.invoke(this, aValue);
+                    quest.log(getClass().getSimpleName() + ":" + aName + " is setted via separate method " + lMethodName + ".");
                 } catch (Exception ex) {
                     Logger.getLogger(QuestObject.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } catch (NoSuchMethodException exm) {
                 Field lField = lClass.getField(aName);
                 try {
+                    boolean lSet = false;
                     Object lValue = lField.get(this);
                     if (lValue instanceof BlockPosition) {
                         if (quest != null) {
@@ -55,14 +58,13 @@ public class QuestObject {
                         } else {
                             ((BlockPosition)lValue).fromCSV(aValue.toString(), ",");
                         }
-                        quest.log(getClass().getSimpleName() + ":" + aName + "=" + lValue);
+                        lSet = true;
                     } else if (lValue instanceof ArrayList) {
                         //Logger.getLogger("xxx").info(lField.getType().toString());
                     } else if (lValue instanceof HashMap) {
                         //Logger.getLogger("xxx").info(lField.getType().toString());
                     } else {
                         Class lDClass = lField.getType();
-                        boolean lSet = false;
                         lValue = aValue;
                         if (lDClass.isAssignableFrom(lValue.getClass())) {
                             lField.set(this, lValue);
@@ -121,12 +123,12 @@ public class QuestObject {
                                     lSet = true;
                                 }
                             }
-                            if (lSet) {
-                                quest.log(getClass().getSimpleName() + ":" + aName + "=" + lValue);
-                            } else {
-                                quest.log(getClass().getSimpleName() + ":" + aName + "=" + lValue + " not assignable!!!");
-                            }
                         }
+                    }
+                    if (lSet) {
+                        quest.log(getClass().getSimpleName() + ":" + aName + "=" + lValue);
+                    } else {
+                        quest.log(getClass().getSimpleName() + ":" + aName + "=" + lValue + " not assignable!!!");
                     }
                 } catch (IllegalArgumentException ex) {
                     Logger.getLogger(Quest.class.getName()).log(Level.SEVERE, null, ex);

@@ -12,6 +12,7 @@ import com.mahn42.framework.SyncBlockList;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
@@ -28,6 +29,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 public class Quest extends QuestObject {
     
     /* Runtime */
+    public Random random = new Random();
     public World world = null;
     public ArrayList<String> players = new ArrayList<String>();
     public Scene currentScene = null;
@@ -113,16 +115,6 @@ public class Quest extends QuestObject {
                 QuestVariable lVar = new QuestVariable();
                 lVar.quest = this;
                 lVar.fromSectionValue(lItem);
-                /*
-                HashMap<String, Object> lMap = (HashMap)lItem;
-                lVar.name = lMap.get("name").toString();
-                Object lValue = lMap.get("value");
-                if (lValue == null) {
-                    lVar.value = "0";
-                } else {
-                    lVar.value = lValue.toString();
-                }
-                */
                 variables.put(lVar.name, lVar);
             }
         }

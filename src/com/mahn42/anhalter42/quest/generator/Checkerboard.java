@@ -55,9 +55,11 @@ public class Checkerboard extends GeneratorBase {
                     for(int bx=0;bx<blockSize;bx++) {
                         for(int by=0;by<blockSize;by++) {
                             for(int bz=0;bz<blockSize;bz++) {
-                                BlockAreaItem lItem = area.get(x+bx, y+by, z+bz);
-                                lItem.id = lId;
-                                lItem.data = lData;
+                                if (x+bx < width && y+by<height && z+bz<depth) {
+                                    BlockAreaItem lItem = area.get(x+bx, y+by, z+bz);
+                                    lItem.id = lId;
+                                    lItem.data = lData;
+                                }
                             }
                         }
                     }

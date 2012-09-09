@@ -16,7 +16,8 @@ public class SetVariable extends Action {
         add,
         sub,
         mul,
-        div
+        div,
+        random
     }
     
     // RUNTIME
@@ -49,6 +50,9 @@ public class SetVariable extends Action {
                 break;
             case div:
                 fVariable.div(value);
+                break;
+            case random:
+                fVariable.random(value);
                 break;
         }
         quest.log("variable '" + fVariable.name + "' = '" + fVariable.value + "'");

@@ -141,7 +141,6 @@ public class Lobster extends GeneratorBase{
     protected Material fMat;
     
     // META
-    public String type;
     public int corridorWidth = 1;
     public int corridorHeight = 2;
     public int borderThickness = 1;
@@ -156,10 +155,10 @@ public class Lobster extends GeneratorBase{
     public boolean breakMoreWalls = false;
     public int chanceForBreakWalls = 10;
     public boolean placeWoodenDoors = false;
-    public int chanceForUpDown = 50;
+    public int chanceForUpDown = 5;
     public int chanceForTorches = 50;
-    public int chanceForChests = 50;
-    public int chanceForWoodenDoors = 10;
+    public int chanceForChests = 25;
+    public int chanceForWoodenDoors = 5;
     
     public MatList wallMaterials = new MatList();
     public MatList floorMaterials = new MatList();

@@ -32,6 +32,7 @@ public class Action extends QuestObject{
         Quest.actionTypes.put("createExplosion", CreateExplosion.class);
         Quest.actionTypes.put("moveBlocks", MoveBlocks.class);
         Quest.actionTypes.put("setVariable", SetVariable.class);
+        Quest.actionTypes.put("replaceBlocks", ReplaceBlocks.class);
     }
 
     public String type;

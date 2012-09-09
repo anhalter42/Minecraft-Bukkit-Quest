@@ -40,7 +40,7 @@ public class MoveBlocks extends Action {
     
     @Override
     public void execute() {
-        area.fromWorld(quest.world, from);
+        area.fromWorld(quest.world, from, false, false);
         if (vector.x != 0 || vector.y != 0 || vector.z != 0) {
             for(int x=(vector.x < 0 ? 0 : width-1);(vector.x < 0 ? x<width : x>=0);x+=(vector.x < 0 ? 1 : -1)) {
                 for(int y=(vector.y < 0 ? 0 : height-1);(vector.y < 0 ? y<height : y>=0);y+=(vector.y < 0 ? 1 : -1)) {

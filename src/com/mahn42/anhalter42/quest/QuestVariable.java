@@ -55,6 +55,16 @@ public class QuestVariable extends QuestObject {
         executeBinding();
     }
     
+    public void random(String aValue) {
+        if (aValue != null) {
+            value = aValue;
+        }
+        Integer lValue = (int)Double.parseDouble(value);
+        lValue = quest.random.nextInt(lValue);
+        value = lValue.toString();
+        executeBinding();
+    }
+    
     public int compare(String aValue) {
         int lResult = 0;
         Double lValue = Double.parseDouble(aValue);
