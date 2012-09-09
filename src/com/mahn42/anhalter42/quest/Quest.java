@@ -110,13 +110,19 @@ public class Quest extends QuestObject {
     public void setVariablesFromSectionValue(Object aValue) {
         if (aValue instanceof ArrayList) {
             for(Object lItem : ((ArrayList)aValue)) {
-                HashMap<String, String> lMap = (HashMap)lItem;
                 QuestVariable lVar = new QuestVariable();
-                lVar.name = lMap.get("name");
-                lVar.value = lMap.get("value");
-                if (lVar.value == null) {
+                lVar.quest = this;
+                lVar.fromSectionValue(lItem);
+                /*
+                HashMap<String, Object> lMap = (HashMap)lItem;
+                lVar.name = lMap.get("name").toString();
+                Object lValue = lMap.get("value");
+                if (lValue == null) {
                     lVar.value = "0";
+                } else {
+                    lVar.value = lValue.toString();
                 }
+                */
                 variables.put(lVar.name, lVar);
             }
         }
@@ -135,6 +141,7 @@ public class Quest extends QuestObject {
         QuestVariable lResult = variables.get(aName);
         if (lResult == null) {
             lResult = new QuestVariable();
+            lResult.quest = this;
             lResult.name = aName;
             variables.put(lResult.name, lResult);
         }

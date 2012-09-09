@@ -12,7 +12,7 @@ import com.mahn42.anhalter42.quest.QuestVariable;
  */
 public class VariableReachedValue extends Trigger {
     
-    public enum Comperator {
+    public enum Comparator {
         equal,
         lower,
         lowerOrEqual,
@@ -21,12 +21,13 @@ public class VariableReachedValue extends Trigger {
     }
     
     // RUNTIME
+    protected boolean fIsReached = false;
     protected QuestVariable fVariable;
     
     // META
     public String name;
     public String value;
-    public Comperator comperator = Comperator.equal;
+    public Comparator comparator = Comparator.equal;
     
     @Override
     public void initialize() {
@@ -37,7 +38,7 @@ public class VariableReachedValue extends Trigger {
     @Override
     public boolean check() {
         boolean lResult = false;
-        switch (comperator) {
+        switch (comparator) {
             case equal:
                 lResult = fVariable.compare(value) == 0;
                 break;
@@ -53,6 +54,13 @@ public class VariableReachedValue extends Trigger {
             case higherOrEqual:
                 lResult = fVariable.compare(value) >= 0;
                 break;
+        }
+        if (fIsReached && lResult) {
+            lResult = false;
+        } else if (fIsReached && !lResult) {
+            fIsReached = false;
+        } else if (!fIsReached && lResult) {
+            fIsReached = true;
         }
         return lResult;
     }

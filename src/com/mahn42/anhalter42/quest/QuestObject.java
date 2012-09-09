@@ -114,6 +114,12 @@ public class QuestObject {
                                 }
                                 lField.set(this, lMat);
                                 lSet = true;
+                            } else if (lDClass.isEnum()) {
+                                Field lEnumField = lDClass.getField(lValue.toString());
+                                if (lEnumField != null) {
+                                    lField.set(this, lEnumField.get(this));
+                                    lSet = true;
+                                }
                             }
                             if (lSet) {
                                 quest.log(getClass().getSimpleName() + ":" + aName + "=" + lValue);
@@ -143,106 +149,6 @@ public class QuestObject {
             Map<String, Object> lValues = (HashMap)aObject;
             for(String lKey : lValues.keySet()) {
                 _setFieldFromSectionValue(lKey, lValues.get(lKey));
-                /*
-                try {
-                    String lMethodName = lKey.substring(0, 1).toUpperCase() + lKey.substring(1);
-                    try {
-                        Method lMethod = lClass.getMethod("set" + lMethodName + "FromSectionValue", Object.class);
-                        try {
-                            lMethod.invoke(this, lValues.get(lKey));
-                        } catch (Exception ex) {
-                            Logger.getLogger(QuestObject.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    } catch (NoSuchMethodException exm) {
-                        Field lField = lClass.getField(lKey);
-                        try {
-                            Object lValue = lField.get(this);
-                            if (lValue instanceof BlockPosition) {
-                                if (quest != null) {
-                                    BlockPosition lPos = quest.markers.get((String)lValues.get(lKey));
-                                    if (lPos != null) {
-                                        ((BlockPosition)lValue).cloneFrom(lPos);
-                                    } else {
-                                        ((BlockPosition)lValue).fromCSV((String)lValues.get(lKey), ",");
-                                    }
-                                } else {
-                                    ((BlockPosition)lValue).fromCSV((String)lValues.get(lKey), ",");
-                                }
-                                quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
-                            } else if (lValue instanceof ArrayList) {
-                                //Logger.getLogger("xxx").info(lField.getType().toString());
-                            } else if (lValue instanceof HashMap) {
-                                //Logger.getLogger("xxx").info(lField.getType().toString());
-                            } else {
-                                Class lDClass = lField.getType();
-                                lValue = lValues.get(lKey);
-                                if (lDClass.isAssignableFrom(lValue.getClass())) {
-                                    lField.set(this, lValue);
-                                    quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValues.get(lKey));
-                                } else {
-                                    if (lDClass.isAssignableFrom(String.class)) {
-                                        lField.set(this, lValue.toString());
-                                        quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
-                                    } else if (lDClass.isAssignableFrom(int.class)) {
-                                        lField.setInt(this, Integer.parseInt(lValue.toString()));
-                                        quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
-                                    } else if (lDClass.isAssignableFrom(Integer.class)) {
-                                        lField.setInt(this, Integer.parseInt(lValue.toString()));
-                                        quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
-                                    } else if (lDClass.isAssignableFrom(short.class)) {
-                                        lField.setShort(this, Short.parseShort(lValue.toString()));
-                                        quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
-                                    } else if (lDClass.isAssignableFrom(Short.class)) {
-                                        lField.setShort(this, Short.parseShort(lValue.toString()));
-                                        quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
-                                    } else if (lDClass.isAssignableFrom(byte.class)) {
-                                        lField.setByte(this, Byte.parseByte(lValue.toString()));
-                                        quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
-                                    } else if (lDClass.isAssignableFrom(Short.class)) {
-                                        lField.setByte(this, Byte.parseByte(lValue.toString()));
-                                        quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
-                                    } else if (lDClass.isAssignableFrom(boolean.class)) {
-                                        lField.setBoolean(this, Boolean.parseBoolean(lValue.toString()));
-                                        quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
-                                    } else if (lDClass.isAssignableFrom(Boolean.class)) {
-                                        lField.setBoolean(this, Boolean.parseBoolean(lValue.toString()));
-                                        quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
-                                    } else if (lDClass.isAssignableFrom(double.class)) {
-                                        lField.setDouble(this, Double.parseDouble(lValue.toString()));
-                                        quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
-                                    } else if (lDClass.isAssignableFrom(Double.class)) {
-                                        lField.setDouble(this, Double.parseDouble(lValue.toString()));
-                                        quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
-                                    } else if (lDClass.isAssignableFrom(float.class)) {
-                                        lField.setFloat(this, Float.parseFloat(lValue.toString()));
-                                        quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
-                                    } else if (lDClass.isAssignableFrom(Float.class)) {
-                                        lField.setFloat(this, Float.parseFloat(lValue.toString()));
-                                        quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
-                                    } else if (lDClass.isAssignableFrom(Material.class)) {
-                                        Material lMat = Material.getMaterial(lValue.toString().toUpperCase());
-                                        if (lMat == null) {
-                                            lMat = Material.getMaterial(Integer.parseInt(lValue.toString()));
-                                        }
-                                        lField.set(this, lMat);
-                                        quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue);
-                                    } else {
-                                        quest.log(getClass().getSimpleName() + ":" + lKey + "=" + lValue + " not assignable!!!");
-                                    }
-                                }
-                            }
-                        } catch (IllegalArgumentException ex) {
-                            Logger.getLogger(Quest.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IllegalAccessException ex) {
-                        }
-                    } catch (SecurityException ex) {
-                        Logger.getLogger(QuestObject.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } catch (NoSuchFieldException ex) {
-                    quest.log(lClass.getSimpleName() + ":Field " + lKey + " not found!");
-                } catch (SecurityException ex) {
-                }
-                */
             }
         }
     }

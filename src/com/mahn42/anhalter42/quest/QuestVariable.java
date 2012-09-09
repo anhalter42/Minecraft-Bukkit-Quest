@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author andre
  */
-public class QuestVariable {
+public class QuestVariable extends QuestObject {
 
     public class Binding {
         public QuestObject object;
@@ -58,7 +58,9 @@ public class QuestVariable {
     public int compare(String aValue) {
         int lResult = 0;
         Double lValue = Double.parseDouble(aValue);
-        lResult = new Double(Double.parseDouble(value)).compareTo(lValue);
+        Double lThis = Double.parseDouble(value);
+        lResult = lThis.compareTo(lValue);
+        //quest.log("this = " + lThis + " compare to " + lValue + " = " + lResult);
         return lResult;
     }
     

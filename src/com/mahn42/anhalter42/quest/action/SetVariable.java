@@ -51,5 +51,6 @@ public class SetVariable extends Action {
                 fVariable.div(value);
                 break;
         }
+        quest.log("variable '" + fVariable.name + "' = '" + fVariable.value + "'");
     }
 }

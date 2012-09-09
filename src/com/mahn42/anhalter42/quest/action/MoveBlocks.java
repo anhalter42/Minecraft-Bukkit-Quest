@@ -47,7 +47,7 @@ public class MoveBlocks extends Action {
                     for(int z=(vector.z < 0 ? 0 : depth-1);(vector.z < 0 ? z<depth : z>=0);z+=(vector.z < 0 ? 1 : -1)) {
                         BlockPosition lToPos = new BlockPosition(x, y, z);
                         lToPos.add(vector);
-                        quest.log("x="+x+" y="+y+" z="+z+"  to "+lToPos);
+                        //quest.log("x="+x+" y="+y+" z="+z+"  to "+lToPos);
                         if (lToPos.x >= 0 && lToPos.x < width
                                 && lToPos.y >= 0 && lToPos.y < height
                                 && lToPos.z >= 0 && lToPos.z < depth) {
