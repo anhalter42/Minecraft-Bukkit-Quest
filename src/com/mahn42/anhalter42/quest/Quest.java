@@ -44,6 +44,8 @@ public class Quest extends QuestObject {
     /* Meta */
     public ArrayList<Scene> scenes = new ArrayList<Scene>();
     public HashMap<String, BlockPosition> markers = new HashMap<String, BlockPosition>();
+    public HashMap<String, QuestInventory> inventories = new HashMap<String, QuestInventory>();
+    public HashMap<String, QuestVariable> variables = new HashMap<String, QuestVariable>();
     public String name;
     public String startScene;
     public BlockPosition startPos = new BlockPosition(0,0,0); // relative from player
@@ -57,14 +59,13 @@ public class Quest extends QuestObject {
     public static HashMap<String, Class> actionTypes = new HashMap<String, Class>();
     public static HashMap<String, Class> triggerTypes = new HashMap<String, Class>();
     public static HashMap<String, Class> generatorTypes = new HashMap<String, Class>();
-    public static HashMap<String, QuestVariable> variables = new HashMap<String, QuestVariable>();
     
     public Quest() {
         quest = this;
     }
     
     public void load(File aFile) {
-        YamlConfiguration lConf = new YamlConfiguration();
+        YamlConfiguration lConf = new YamlConfiguration(); 
         try {
             lConf.load(aFile);
             fromSectionValue(lConf.get("quest"));
@@ -116,6 +117,17 @@ public class Quest extends QuestObject {
                 lVar.quest = this;
                 lVar.fromSectionValue(lItem);
                 variables.put(lVar.name, lVar);
+            }
+        }
+    }
+
+    public void setInventoriesFromSectionValue(Object aValue) {
+        if (aValue instanceof ArrayList) {
+            for(Object lItem : ((ArrayList)aValue)) {
+                QuestInventory lInv = new QuestInventory();
+                lInv.quest = this;
+                lInv.fromSectionValue(lItem);
+                inventories.put(lInv.name, lInv);
             }
         }
     }

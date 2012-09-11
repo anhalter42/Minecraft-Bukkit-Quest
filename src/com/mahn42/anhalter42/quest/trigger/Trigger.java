@@ -24,6 +24,7 @@ public class Trigger extends QuestObject {
         Quest.triggerTypes.put("PlayerEnteredRegion", PlayerEnteredRegion.class);
         Quest.triggerTypes.put("TimerLapsed", TimerLapsed.class);
         Quest.triggerTypes.put("VariableReachedValue", VariableReachedValue.class);
+        Quest.triggerTypes.put("PlayerCountReached", PlayerCountReached.class);
     }
 
     public String type;

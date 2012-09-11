@@ -4,15 +4,23 @@
  */
 package com.mahn42.anhalter42.quest.action;
 
+import com.mahn42.anhalter42.quest.QuestObject;
 import com.mahn42.framework.BlockArea;
 import com.mahn42.framework.BlockArea.BlockAreaItem;
 import com.mahn42.framework.BlockPosition;
+import java.util.ArrayList;
+import org.bukkit.Material;
 
 /**
  *
  * @author andre
  */
 public class MoveBlocks extends Action {
+    
+    public class Mat extends QuestObject {
+        public Material material = Material.AIR;
+        public byte data = (byte)0;
+    }
     
     // RUNTIME
     public BlockArea area;
@@ -24,7 +32,30 @@ public class MoveBlocks extends Action {
     public BlockPosition from = new BlockPosition();
     public BlockPosition to = new BlockPosition();
     public BlockPosition vector = new BlockPosition();
+    public ArrayList<Mat> transparentMaterials = new ArrayList<Mat>();
     public boolean cycle = false;
+    
+    public void setTransparentMaterialsFromSectionValue(Object aObject) {
+        if (aObject instanceof ArrayList) {
+            for(Object lItem : (ArrayList)aObject) {
+                Mat lMat = new Mat();
+                lMat.quest = quest;
+                lMat.fromSectionValue(lItem);
+                transparentMaterials.add(lMat);
+            }
+        }
+    }
+    
+    public boolean isTransparent(BlockAreaItem lItem) {
+        boolean lResult = false;
+        for(Mat lMat : transparentMaterials) {
+            if (lMat.material.getId() == lItem.id && (lMat.data == (byte)0 || lMat.data == lItem.data)) {
+                lResult = true;
+                break;
+            }
+        }
+        return lResult;
+    }
     
     @Override
     public void initialize() {
@@ -52,8 +83,10 @@ public class MoveBlocks extends Action {
                                 && lToPos.y >= 0 && lToPos.y < height
                                 && lToPos.z >= 0 && lToPos.z < depth) {
                             BlockAreaItem lFrom = area.get(x, y, z);
-                            BlockAreaItem lTo = area.get(lToPos.x, lToPos.y, lToPos.z);
-                            lTo.cloneFrom(lFrom);
+                            if (!isTransparent(lFrom)) {
+                                BlockAreaItem lTo = area.get(lToPos.x, lToPos.y, lToPos.z);
+                                lTo.cloneFrom(lFrom);
+                            }
                         }
                     }
                 }

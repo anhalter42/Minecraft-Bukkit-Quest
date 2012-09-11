@@ -14,6 +14,11 @@ import org.bukkit.entity.Player;
  * @author andre
  */
 public class PlayerEnteredRegion extends Trigger {
+    
+    public enum PlayerState {
+        unknown, normal, sneaking, blocking, flying, sleeping, sprinting, insideVehicle
+    }
+    
     // RUNTIME
     protected ArrayList<String> fPlayers = new ArrayList<String>();
     // META
@@ -21,13 +26,24 @@ public class PlayerEnteredRegion extends Trigger {
     public BlockPosition from = new BlockPosition();
     public BlockPosition to = new BlockPosition();
     public boolean addToPlayers = true;
+    public PlayerState playerState = PlayerState.unknown;
     
     protected boolean checkPlayer(Player aPlayer) {
-        BlockPosition lPos = new BlockPosition(aPlayer.getLocation());
-        lPos.subtract(quest.edge1);
-        boolean lResult = lPos.isBetween(from, to);
+        boolean lResult;
+        PlayerState lState = PlayerState.normal;
+        if (aPlayer.isBlocking()) lState = PlayerState.blocking;
+        if (aPlayer.isFlying()) lState = PlayerState.flying;
+        if (aPlayer.isSleeping()) lState = PlayerState.sleeping;
+        if (aPlayer.isSneaking()) lState = PlayerState.sneaking;
+        if (aPlayer.isSprinting()) lState = PlayerState.sprinting;
+        lResult = playerState == PlayerState.unknown || lState == playerState;
         if (lResult) {
-            quest.log(aPlayer.getName() + " pos " + lPos + " is " + lResult);
+            BlockPosition lPos = new BlockPosition(aPlayer.getLocation());
+            lPos.subtract(quest.edge1);
+            lResult = lPos.isBetween(from, to);
+            if (lResult) {
+                quest.log(aPlayer.getName() + " pos " + lPos + " is " + lResult);
+            }
         }
         return lResult;
     }
