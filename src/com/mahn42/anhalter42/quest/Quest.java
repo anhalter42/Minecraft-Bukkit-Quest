@@ -152,6 +152,16 @@ public class Quest extends QuestObject {
         return lResult;
     }
     
+    public QuestInventory getInventory(String aName) {
+        QuestInventory lInv = inventories.get(aName);
+        if (lInv == null) {
+            lInv = new QuestInventory();
+            lInv.quest = this;
+            inventories.put(aName, lInv);
+        }
+        return lInv;
+    }
+    
     public void initialze() {
         if (edge2.x == 0 && edge2.y == 0 && edge2.z == 0) {
             edge2.cloneFrom(edge1);
