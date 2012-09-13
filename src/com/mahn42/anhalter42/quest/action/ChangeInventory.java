@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Dispenser;
+import org.bukkit.block.Furnace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.PlayerInventory;
@@ -24,19 +25,38 @@ public class ChangeInventory extends Action {
         add,
         remove
     }
-    public BlockPosition to = new BlockPosition();
+    public BlockPosition to = new BlockPosition(-1,-1,-1);
+    public BlockPosition from = new BlockPosition(-1,-1,-1);
     public String name = null;
-    public int player = -1; // -1 kein player, 0 alle player, > 0 player nummer
+    public int player = -1; // -1 kein player, 0 alle player, >0 player nummer
     public String loadFrom = null;
     public Mode mode = Mode.add;
+    public boolean clear = false;
+    public int fromPlayer = -1; // -1 kein player, >0 player nummer
     public ArrayList<QuestItemStack> items = new ArrayList<QuestItemStack>();
 
     @Override
     public void initialize() {
         super.initialize();
-        if (name == null) {
+        if (to.x >= 0) {
             to.add(quest.edge1);
         }
+        if (from.x >= 0) {
+            from.add(quest.edge1);
+        }
+    }
+    
+    protected Inventory getInventoryFromPos(BlockPosition aPos) {
+        BlockState lState = to.getBlock(quest.world).getState();
+        Inventory lInv = null;
+        if (lState instanceof Chest) {
+            lInv = ((Chest)lState).getBlockInventory();
+        } else if (lState instanceof Dispenser) {
+            lInv = ((Dispenser)lState).getInventory();
+        } else if (lState instanceof Furnace) {
+            lInv = ((Furnace)lState).getInventory();
+        }
+        return lInv;
     }
     
     @Override
@@ -45,7 +65,18 @@ public class ChangeInventory extends Action {
         lInv.items.addAll(items);
         if (loadFrom != null && !loadFrom.isEmpty()) {
             QuestInventory lLF = quest.inventories.get(loadFrom);
-            lInv.items.addAll(lLF.items);
+            lInv.add(lLF);
+        }
+        if (fromPlayer > 0) {
+            Player lPlayer = quest.getPlayer(player - 1);
+            PlayerInventory lPI = lPlayer.getInventory();
+            lInv.add(lPI);
+        }
+        if (from.x >= 0) {
+            Inventory lFromInv = getInventoryFromPos(from);
+            if (lFromInv != null) {
+                lInv.add(lFromInv);
+            }
         }
         if (name != null && !name.isEmpty()) {
             QuestInventory lTo = quest.getInventory(name);
@@ -92,13 +123,7 @@ public class ChangeInventory extends Action {
                 }
             }
         } else {
-            BlockState lState = to.getBlock(quest.world).getState();
-            Inventory lToInv = null;
-            if (lState instanceof Chest) {
-                lToInv = ((Chest)lState).getBlockInventory();
-            } else if (lState instanceof Dispenser) {
-                lToInv = ((Dispenser)lState).getInventory();
-            }
+            Inventory lToInv = getInventoryFromPos(to);
             if (lToInv != null) {
                 QuestInventory lTo = new QuestInventory();
                 lTo.add(lToInv);
