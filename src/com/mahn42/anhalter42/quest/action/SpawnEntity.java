@@ -44,7 +44,8 @@ public class SpawnEntity extends Action {
                     quest.world.dropItem(to.getLocation(quest.world), lStack);
                 }
             } else {
-                quest.world.spawnEntity(to.getLocation(quest.world), entityType);
+                quest.syncList.add(to, entityType);
+                //quest.world.spawnEntity(to.getLocation(quest.world), entityType);
             }
         }
     }

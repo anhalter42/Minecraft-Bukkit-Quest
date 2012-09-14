@@ -13,7 +13,9 @@ import com.mahn42.framework.SyncBlockList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -159,6 +161,27 @@ public class Lobster extends GeneratorBase{
         }
     }
     
+    public class EntityItem extends QuestObject {
+        public EntityType type = EntityType.PIG;
+        public int amount = 1;
+        public int maxAmount = 1;
+        public int chance = 10;
+        public int mazeLevel = -1;
+    } 
+    
+    public class EntityItems extends ArrayList<EntityItem> {
+        public void fromSectionValue(Object aValue) {
+            if (aValue instanceof ArrayList) {
+                for(Object lItem : ((ArrayList)aValue)) {
+                    EntityItem lEnt = new EntityItem();
+                    lEnt.quest = quest;
+                    lEnt.fromSectionValue(lItem);
+                    add(lEnt);
+                }
+            }
+        }
+    }
+    
     // RUNTIME
     protected Maze fMaze;
     protected Material fMat;
@@ -173,22 +196,24 @@ public class Lobster extends GeneratorBase{
     public String baseMaterial = "SMOOTH_BRICK";
     public byte baseMaterialData = (byte)3;
     public boolean placeTorches = true;
+    public int chanceForTorches = 50;
     public boolean placeLadders = true;
     public boolean placeChests = true;
-    public boolean breakMoreWalls = false;
-    public int chanceForBreakWalls = 10;
-    public boolean placeWoodenDoors = false;
-    public int chanceForUpDown = 5;
-    public int chanceForTorches = 50;
     public int chanceForChests = 25;
+    public boolean breakMoreWalls = false;
+    public int chanceForBreakWalls = 5;
+    public boolean placeWoodenDoors = false;
     public int chanceForWoodenDoors = 5;
+    public int chanceForUpDown = 5;
     public boolean ceilingInTopLevel = true;
+    public boolean placeEntities = false;
     
     public BlockArea.BlockAreaPlaceMode blockPlaceMode = BlockArea.BlockAreaPlaceMode.full;
     
     public MatList wallMaterials = new MatList();
     public MatList floorMaterials = new MatList();
     public MatList ceilingMaterials = new MatList();
+    public EntityItems entities = new EntityItems();
     
     public ChestItems chestItems = new ChestItems();
     
@@ -506,6 +531,27 @@ public class Lobster extends GeneratorBase{
                                         }
                                     }
                                     break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (placeEntities) {
+            Random lRnd = new Random();
+            for(int x=0; x<fMaze.width; x++) {
+                for(int y=0; y<fMaze.height; y++) {
+                    for(int z=0; z<fMaze.depth; z++) {
+                        for(EntityItem lItem : entities) {
+                            if (lRnd.nextInt(100) < lItem.chance) {
+                                BlockPosition lPos = new BlockPosition(getX(x), getY(y), getZ(z));
+                                int lCount = lItem.amount;
+                                if (lCount < lItem.maxAmount) {
+                                    lCount += lRnd.nextInt(lItem.maxAmount - lCount + 1);
+                                }
+                                for(int i=0;i<lCount;i++) {
+                                    quest.syncList.add(lPos, lItem.type);
                                 }
                             }
                         }
