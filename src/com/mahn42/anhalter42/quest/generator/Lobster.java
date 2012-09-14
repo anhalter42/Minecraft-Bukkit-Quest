@@ -7,6 +7,7 @@ package com.mahn42.anhalter42.quest.generator;
 import com.mahn42.anhalter42.quest.GeneratorBase;
 import com.mahn42.anhalter42.quest.QuestObject;
 import com.mahn42.framework.BlockArea;
+import com.mahn42.framework.BlockArea.BlockAreaEntity;
 import com.mahn42.framework.BlockArea.BlockAreaItem;
 import com.mahn42.framework.BlockPosition;
 import com.mahn42.framework.SyncBlockList;
@@ -555,7 +556,9 @@ public class Lobster extends GeneratorBase{
                                     lCount += lRnd.nextInt(lItem.maxAmount - lCount + 1);
                                 }
                                 for(int i=0;i<lCount;i++) {
-                                    quest.syncList.add(lPos, lItem.type);
+                                    BlockAreaEntity lEntity = area.newEntity();
+                                    lEntity.type = lItem.type;
+                                    lEntity.location = lPos;
                                 }
                             }
                         }
