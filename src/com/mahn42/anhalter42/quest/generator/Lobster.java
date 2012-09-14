@@ -550,7 +550,7 @@ public class Lobster extends GeneratorBase{
                     for(int z=0; z<fMaze.depth; z++) {
                         for(EntityItem lItem : entities) {
                             if (lRnd.nextInt(100) < lItem.chance) {
-                                BlockPosition lPos = new BlockPosition(getX(x), getY(y), getZ(z));
+                                BlockPosition lPos = new BlockPosition(getX(x), getY(y) + 1, getZ(z));
                                 int lCount = lItem.amount;
                                 if (lCount < lItem.maxAmount) {
                                     lCount += lRnd.nextInt(lItem.maxAmount - lCount + 1);
