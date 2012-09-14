@@ -239,6 +239,10 @@ public class Lobster extends GeneratorBase{
         passages.fromSectionValue(aValue);
     }
     
+    public void setEntitiesFromSectionValue(Object aValue) {
+        entities.fromSectionValue(aValue);
+    }
+    
     @Override
     public void initialize(BlockPosition aFrom, BlockPosition aTo) {
         super.initialize(aFrom, aTo);
