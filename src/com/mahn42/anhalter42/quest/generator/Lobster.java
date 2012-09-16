@@ -411,10 +411,16 @@ public class Lobster extends GeneratorBase{
             if (lPas.mazePos.x >= 0) {
                 lCell = fMaze.get(lPas.mazePos.x, lPas.mazePos.y, lPas.mazePos.z);
             } else {
-                lCell = fMaze.get((lPas.pos.x - (borderThickness + wallThickness)) / (corridorWidth+wallThickness),
-                                  (lPas.pos.y - (borderThickness + ceilingThickness)) / (corridorHeight+ceilingThickness),
-                                  (lPas.pos.z - (borderThickness + wallThickness)) / (corridorWidth+wallThickness));
-                
+                int x = (lPas.pos.x - (borderThickness + wallThickness)) / (corridorWidth+wallThickness);
+                int y = (lPas.pos.y - (borderThickness + ceilingThickness)) / (corridorHeight+ceilingThickness);
+                int z = (lPas.pos.z - (borderThickness + wallThickness)) / (corridorWidth+wallThickness);
+                if (x<0) x = 0;
+                if (x>fMaze.width) x = fMaze.width - 1;
+                if (y<0) y = 0;
+                if (y>fMaze.height) y = fMaze.height - 1;
+                if (z<0) z = 0;
+                if (z>fMaze.depth) z = fMaze.depth - 1;
+                lCell = fMaze.get(x, y, z);
             }
             if (lPas.up) lCell.links[Maze.DirectionTop].broken = true;
             if (lPas.down) lCell.links[Maze.DirectionBottom].broken = true;
