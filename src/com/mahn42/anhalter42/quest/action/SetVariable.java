@@ -17,7 +17,10 @@ public class SetVariable extends Action {
         sub,
         mul,
         div,
-        random
+        random,
+        bitand,
+        bitor,
+        bitxor
     }
     
     // RUNTIME
@@ -53,6 +56,15 @@ public class SetVariable extends Action {
                 break;
             case random:
                 fVariable.random(value);
+                break;
+            case bitand:
+                fVariable.bitand(value);
+                break;
+            case bitor:
+                fVariable.bitor(value);
+                break;
+            case bitxor:
+                fVariable.bitxor(value);
                 break;
         }
         quest.log("variable '" + fVariable.name + "' = '" + fVariable.value + "'");

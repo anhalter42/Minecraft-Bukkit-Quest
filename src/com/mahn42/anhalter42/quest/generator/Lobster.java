@@ -140,7 +140,8 @@ public class Lobster extends GeneratorBase{
     }
     
     public class Passage extends QuestObject {
-        public BlockPosition pos = new BlockPosition();
+        public BlockPosition mazePos = new BlockPosition(-1,-1,-1);
+        public BlockPosition pos = new BlockPosition(-1,-1,-1);
         public boolean up = false;
         public boolean down = false;
         public boolean right = false;
@@ -406,7 +407,15 @@ public class Lobster extends GeneratorBase{
             }
         }
         for(Passage lPas : passages) {
-            Maze.Cell lCell = fMaze.get(lPas.pos.x, lPas.pos.y, lPas.pos.z);
+            Maze.Cell lCell = null;
+            if (lPas.mazePos.x >= 0) {
+                lCell = fMaze.get(lPas.mazePos.x, lPas.mazePos.y, lPas.mazePos.z);
+            } else {
+                lCell = fMaze.get((lPas.pos.x - (borderThickness + wallThickness)) / (corridorWidth+wallThickness),
+                                  (lPas.pos.y - (borderThickness + ceilingThickness)) / (corridorHeight+ceilingThickness),
+                                  (lPas.pos.z - (borderThickness + wallThickness)) / (corridorWidth+wallThickness));
+                
+            }
             if (lPas.up) lCell.links[Maze.DirectionTop].broken = true;
             if (lPas.down) lCell.links[Maze.DirectionBottom].broken = true;
             if (lPas.left) lCell.links[Maze.DirectionLeft].broken = true;
@@ -550,7 +559,7 @@ public class Lobster extends GeneratorBase{
                     for(int z=0; z<fMaze.depth; z++) {
                         for(EntityItem lItem : entities) {
                             if (lRnd.nextInt(100) < lItem.chance) {
-                                BlockPosition lPos = new BlockPosition(getX(x), getY(y) + 1, getZ(z));
+                                BlockPosition lPos = new BlockPosition(getX(x), getY(y), getZ(z));
                                 int lCount = lItem.amount;
                                 if (lCount < lItem.maxAmount) {
                                     lCount += lRnd.nextInt(lItem.maxAmount - lCount + 1);

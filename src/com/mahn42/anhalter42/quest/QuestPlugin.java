@@ -9,9 +9,11 @@ import com.mahn42.anhalter42.quest.action.GenerateBlocks;
 import com.mahn42.anhalter42.quest.generator.Maze;
 import com.mahn42.anhalter42.quest.generator.Maze.Cell;
 import com.mahn42.anhalter42.quest.trigger.Trigger;
+import com.mahn42.framework.BlockPosition;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -123,6 +125,17 @@ public class QuestPlugin extends JavaPlugin {
             }
         }
         return null;
+    }
+    
+    public ArrayList<QuestTask> getQuestTasks(Location aLoc) {
+        ArrayList<QuestTask> lResult = new ArrayList<QuestTask>();
+        BlockPosition lPos = new BlockPosition(aLoc);
+        for(QuestTask lTask : tasks) {
+            if (lPos.isBetween(lTask.quest.edge1, lTask.quest.edge2)) {
+                lResult.add(lTask);
+            }
+        }
+        return lResult;
     }
     
     public void stopQuest(Quest aQuest) {

@@ -55,6 +55,30 @@ public class QuestVariable extends QuestObject {
         executeBinding();
     }
     
+    public void bitand(String aValue) {
+        int lV1 = (int)Double.parseDouble(value);
+        int lV2 = (int)Double.parseDouble(aValue);
+        Integer lValue = lV1 & lV2;
+        value = lValue.toString();
+        executeBinding();
+    }
+
+    public void bitor(String aValue) {
+        int lV1 = (int)Double.parseDouble(value);
+        int lV2 = (int)Double.parseDouble(aValue);
+        Integer lValue = lV1 | lV2;
+        value = lValue.toString();
+        executeBinding();
+    }
+
+    public void bitxor(String aValue) {
+        int lV1 = (int)Double.parseDouble(value);
+        int lV2 = (int)Double.parseDouble(aValue);
+        Integer lValue = lV1 ^ lV2;
+        value = lValue.toString();
+        executeBinding();
+    }
+
     public void random(String aValue) {
         if (aValue != null) {
             value = aValue;

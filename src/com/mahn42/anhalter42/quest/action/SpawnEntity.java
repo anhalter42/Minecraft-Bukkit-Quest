@@ -43,6 +43,8 @@ public class SpawnEntity extends Action {
                 } else {
                     quest.world.dropItem(to.getLocation(quest.world), lStack);
                 }
+            } else if (entityType == EntityType.FALLING_BLOCK) {
+                quest.world.spawnFallingBlock(to.getLocation(quest.world), material, data);
             } else {
                 quest.syncList.add(to, entityType);
                 //quest.world.spawnEntity(to.getLocation(quest.world), entityType);

@@ -40,6 +40,7 @@ public class Quest extends QuestObject {
     public boolean stopped = false;
     public HashMap<String, Object> objects = new HashMap<String, Object>();
     public RestrictedRegion restrictedRegion = new RestrictedRegion();
+    public ArrayList<QuestTaskInteraction> interactions;
     
     /* Meta */
     public ArrayList<Scene> scenes = new ArrayList<Scene>();
@@ -215,11 +216,13 @@ public class Quest extends QuestObject {
                 lPlayer.teleport(lLoc, PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
             stopped = true;
+            QuestPlugin.plugin.stopQuest(this);
             log("Quest " + name + " stopped. (SP:" + socialPoints + ")");
         }
     }
 
     public void finish() {
+        stop();
     }
     
     public void log(String aText) {

@@ -5,6 +5,7 @@
 package com.mahn42.anhalter42.quest;
 
 import com.mahn42.framework.SyncBlockList;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,6 +18,7 @@ public class QuestTask implements Runnable {
     
     protected boolean fInitialized = false;
     protected boolean fRun = false;
+    protected ArrayList<QuestTaskInteraction> fInteractions = new ArrayList<QuestTaskInteraction>();
     
     @Override
     public void run() {
@@ -28,6 +30,10 @@ public class QuestTask implements Runnable {
                     fInitialized = true;
                 }
                 //quest.log("Task begin");
+                synchronized(fInteractions) {
+                    quest.interactions = fInteractions;
+                    fInteractions = new ArrayList<QuestTaskInteraction>();
+                }
                 SyncBlockList lList = new SyncBlockList(quest.world);
                 quest.syncList = lList;
                 quest.run();
@@ -50,5 +56,10 @@ public class QuestTask implements Runnable {
     public void finish() {
         quest.finish();
     }
-    
+ 
+    public void addInteraction(QuestTaskInteraction aInteraction) {
+        synchronized(fInteractions) {
+            fInteractions.add(aInteraction);
+        }
+    }
 }
