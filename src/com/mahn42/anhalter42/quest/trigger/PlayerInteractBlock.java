@@ -27,9 +27,10 @@ public class PlayerInteractBlock extends Trigger {
     public PlayerAction playerAction = PlayerAction.use_or_fight;
     public QuestTaskInteraction.Kind kind = QuestTaskInteraction.Kind.interaction;
     public int player = -1;
-    public Material material;
+    public Material material = null;
     public byte data = (byte)0;
-    public Material itemInHand;
+    public Material itemInHand = null;
+    public boolean addToPlayers = true;
     
     @Override
     public void initialize() {
@@ -42,8 +43,8 @@ public class PlayerInteractBlock extends Trigger {
         boolean lResult = false;
         for(QuestTaskInteraction lI : quest.interactions) {
             if (kind == lI.kind
-                    && lI.position.isBetween(from, to)
-                    && lI.material.equals(material)
+                    && (from.x == -1 || lI.position.isBetween(from, to))
+                    && (material == null || lI.material.equals(material))
                     && (data == 0 || data == lI.data)
                     && (itemInHand == null || (lI.item != null && lI.item.getType() == itemInHand))
                     && (playerAction == PlayerAction.use_or_fight
@@ -60,18 +61,20 @@ public class PlayerInteractBlock extends Trigger {
                         break;
                     }
                 } else {
+                    if (addToPlayers && !quest.players.contains(lI.player.getName())) {
+                        quest.players.add(lI.player.getName());
+                    }
                     lResult = true;
-                    break;
                 }
             }
         }
-        if (fIsReached && lResult) {
+        /*if (fIsReached && lResult) {
             lResult = false;
         } else if (fIsReached && !lResult) {
             fIsReached = false;
         } else if (!fIsReached && lResult) {
             fIsReached = true;
-        }
+        }*/
         return lResult;
     }
 }

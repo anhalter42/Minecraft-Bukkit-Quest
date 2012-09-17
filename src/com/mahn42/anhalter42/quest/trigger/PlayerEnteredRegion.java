@@ -31,11 +31,11 @@ public class PlayerEnteredRegion extends Trigger {
     protected boolean checkPlayer(Player aPlayer) {
         boolean lResult;
         PlayerState lState = PlayerState.normal;
-        if (aPlayer.isBlocking()) lState = PlayerState.blocking;
-        if (aPlayer.isFlying()) lState = PlayerState.flying;
-        if (aPlayer.isSleeping()) lState = PlayerState.sleeping;
-        if (aPlayer.isSneaking()) lState = PlayerState.sneaking;
-        if (aPlayer.isSprinting()) lState = PlayerState.sprinting;
+        if (aPlayer.isBlocking()) { lState = PlayerState.blocking; }
+        if (aPlayer.isFlying()) { lState = PlayerState.flying; }
+        if (aPlayer.isSleeping()) { lState = PlayerState.sleeping; }
+        if (aPlayer.isSneaking()) { lState = PlayerState.sneaking; }
+        if (aPlayer.isSprinting()) { lState = PlayerState.sprinting; }
         lResult = playerState == PlayerState.unknown || lState == playerState;
         if (lResult) {
             BlockPosition lPos = new BlockPosition(aPlayer.getLocation());
