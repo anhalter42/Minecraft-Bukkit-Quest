@@ -2,6 +2,7 @@
 name: Quest
 main: com.mahn42.anhalter42.quest.QuestPlugin
 version: 0.01
+depend: [MAHN42-Framework]
 commands:
    q_start:
       description: quest starten

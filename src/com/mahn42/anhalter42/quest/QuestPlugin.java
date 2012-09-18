@@ -6,15 +6,11 @@ package com.mahn42.anhalter42.quest;
 
 import com.mahn42.anhalter42.quest.action.Action;
 import com.mahn42.anhalter42.quest.action.GenerateBlocks;
-import com.mahn42.anhalter42.quest.generator.Maze;
-import com.mahn42.anhalter42.quest.generator.Maze.Cell;
 import com.mahn42.anhalter42.quest.trigger.Trigger;
 import com.mahn42.framework.BlockPosition;
 import com.mahn42.framework.Framework;
 import com.mahn42.framework.WorldDBList;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
