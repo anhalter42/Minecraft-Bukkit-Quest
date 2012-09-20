@@ -14,7 +14,6 @@ import com.mahn42.framework.SyncBlockList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -84,7 +83,7 @@ public class Lobster extends GeneratorBase{
         public int maxAmount = 1;
         public int chanceToUse = 100;
         public int mazeLevel = -1; // allways
-        
+        /*
         public void setMaterialFromSectionValue(Object aValue) {
             String lStr = aValue.toString().toUpperCase();
             material = Material.getMaterial(lStr);
@@ -92,6 +91,7 @@ public class Lobster extends GeneratorBase{
                 material = Material.getMaterial(Integer.parseInt(lStr));
             }
         }
+        */
     }
     
     public class ChestItems extends ArrayList<ChestItem> {

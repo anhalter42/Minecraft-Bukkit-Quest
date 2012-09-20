@@ -8,6 +8,7 @@ import com.mahn42.anhalter42.quest.Quest;
 import com.mahn42.anhalter42.quest.QuestObject;
 import com.mahn42.anhalter42.quest.QuestPlugin;
 import com.mahn42.anhalter42.quest.action.Action;
+import com.mahn42.anhalter42.quest.action.ActionList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -30,8 +31,9 @@ public class Trigger extends QuestObject {
     }
 
     public String type;
-    public ArrayList<Action> actions = new ArrayList<Action>();
-    
+    public ActionList actions = new ActionList(quest);
+
+    /*
     public void setActionsFromSectionValue(Object aValue) {
         if (aValue instanceof ArrayList) {
             for(Object lItem : ((ArrayList)aValue)) {
@@ -53,7 +55,8 @@ public class Trigger extends QuestObject {
             }
         }
     }
-
+    */
+    
     public void initialize() {
         for(Action lAction : actions) {
             lAction.initialize();

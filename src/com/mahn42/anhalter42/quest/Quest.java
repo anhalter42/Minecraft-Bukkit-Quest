@@ -4,6 +4,8 @@
  */
 package com.mahn42.anhalter42.quest;
 
+import com.mahn42.anhalter42.quest.action.Action;
+import com.mahn42.anhalter42.quest.action.ActionList;
 import com.mahn42.framework.BlockAreaList;
 import com.mahn42.framework.BlockPosition;
 import com.mahn42.framework.Framework;
@@ -43,10 +45,10 @@ public class Quest extends QuestObject {
     public ArrayList<QuestTaskInteraction> interactions;
     
     /* Meta */
-    public ArrayList<Scene> scenes = new ArrayList<Scene>();
+    public QuestObjectArray<Scene> scenes = new QuestObjectArray<Scene>(this, Scene.class);
     public HashMap<String, BlockPosition> markers = new HashMap<String, BlockPosition>();
-    public HashMap<String, QuestInventory> inventories = new HashMap<String, QuestInventory>();
-    public HashMap<String, QuestVariable> variables = new HashMap<String, QuestVariable>();
+    public QuestObjectHashMap<QuestInventory> inventories = new QuestObjectHashMap<QuestInventory>(this, QuestInventory.class);
+    public QuestObjectHashMap<QuestVariable> variables = new QuestObjectHashMap<QuestVariable>(this, QuestVariable.class);
     public String name;
     public String startScene;
     public BlockPosition startPos = new BlockPosition(0,0,0); // relative from player
@@ -55,6 +57,8 @@ public class Quest extends QuestObject {
     public int depth = 1;
     public int socialPoints = 1;
     public boolean restrictRegion = true;
+    public ActionList stopActions = new ActionList(this);
+    public ActionList startActions = new ActionList(this);
     
     /* Static */
     public static HashMap<String, Class> actionTypes = new HashMap<String, Class>();
@@ -89,6 +93,7 @@ public class Quest extends QuestObject {
         }
     }
 
+    /*
     public void setScenesFromSectionValue(Object aValue) {
         if (aValue instanceof ArrayList) {
             for(Object lItem : ((ArrayList)aValue)) {
@@ -98,7 +103,7 @@ public class Quest extends QuestObject {
                 scenes.add(lScene);
             }
         }
-    }
+    }*/
 
     public void setMarkersFromSectionValue(Object aValue) {
         if (aValue instanceof ArrayList) {
@@ -110,7 +115,7 @@ public class Quest extends QuestObject {
             }
         }
     }
-
+/*
     public void setVariablesFromSectionValue(Object aValue) {
         if (aValue instanceof ArrayList) {
             for(Object lItem : ((ArrayList)aValue)) {
@@ -132,7 +137,7 @@ public class Quest extends QuestObject {
             }
         }
     }
-
+*/
     public Scene getScene(String aName) {
         for(Scene lScene : scenes) {
             if (lScene.name.equals(aName)) {
@@ -184,6 +189,16 @@ public class Quest extends QuestObject {
         if (startScene != null) {
             currentScene = getScene(startScene);
         }
+        for(Action lAction : stopActions) {
+            lAction.initialize();
+        }
+        for(Action lAction : startActions) {
+            lAction.initialize();
+        }
+        for(Action lAction : startActions) {
+            quest.log("action " + lAction.type + " executed.");
+            lAction.execute();
+        }
     }
     
     public void run() {
@@ -204,6 +219,12 @@ public class Quest extends QuestObject {
 
     public void stop() {
         if (!stopped) {
+            syncList = new SyncBlockList(world);
+            for(Action lAction : stopActions) {
+                quest.log("action " + lAction.type + " executed.");
+                lAction.execute();
+            }
+            syncList.execute();
             if (restrictRegion) {
                 Framework.plugin.getRestrictedRegions(world, true).remove(restrictedRegion);
             }

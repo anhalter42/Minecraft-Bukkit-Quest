@@ -8,10 +8,13 @@ import com.mahn42.anhalter42.quest.action.Action;
 import com.mahn42.anhalter42.quest.action.GenerateBlocks;
 import com.mahn42.anhalter42.quest.trigger.Trigger;
 import com.mahn42.framework.BlockPosition;
+import com.mahn42.framework.BuildingDescription;
+import com.mahn42.framework.BuildingDetector;
 import com.mahn42.framework.Framework;
 import com.mahn42.framework.WorldDBList;
 import java.util.ArrayList;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -45,6 +48,24 @@ public class QuestPlugin extends JavaPlugin {
         getCommand("q_stop").setExecutor(new CommandQuestStop());
         getCommand("q_gentest").setExecutor(new CommandGeneratorTest());
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        QuestBuildingHandler lHandler = new QuestBuildingHandler();
+        BuildingDetector lDetector = Framework.plugin.getBuildingDetector();
+        BuildingDescription lDesc;
+        BuildingDescription.BlockDescription lBDesc;
+        BuildingDescription.RelatedTo lRel;
+        
+        lDesc = lDetector.newDescription("Quest.Starter");
+        lDesc.typeName = "Quest Starter";
+        lDesc.handler = lHandler;
+        lBDesc = lDesc.newBlockDescription("base");
+        lBDesc.materials.add(Material.SMOOTH_BRICK, (byte)3);
+        lBDesc.detectSensible = true;
+        lRel = lBDesc.newRelatedTo("sign", BuildingDescription.RelatedPosition.Nearby, 1);
+        lBDesc = lDesc.newBlockDescription("sign");
+        lBDesc.materials.add(Material.SIGN);
+        lBDesc.materials.add(Material.SIGN_POST);
+        lBDesc.materials.add(Material.WALL_SIGN);
+        lDesc.activate();
     }
 
     @Override

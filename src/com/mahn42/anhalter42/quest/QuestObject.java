@@ -59,9 +59,17 @@ public class QuestObject {
                             ((BlockPosition)lValue).fromCSV(aValue.toString(), ",");
                         }
                         lSet = true;
-                    } else if (lValue instanceof ArrayList) {
+                    } else if (lValue instanceof QuestObjectArray) {
+                        ((QuestObjectArray)lValue).quest = quest;
+                        ((QuestObjectArray)lValue).fromSectionValue(aValue);
+                        lSet = true;
+                    } else if (lValue instanceof QuestObjectHashMap) {
+                        ((QuestObjectHashMap)lValue).quest = quest;
+                        ((QuestObjectHashMap)lValue).fromSectionValue(aValue);
+                        lSet = true;
+                    //} else if (lValue instanceof ArrayList) {
                         //Logger.getLogger("xxx").info(lField.getType().toString());
-                    } else if (lValue instanceof HashMap) {
+                    //} else if (lValue instanceof HashMap) {
                         //Logger.getLogger("xxx").info(lField.getType().toString());
                     } else {
                         Class lDClass = lField.getType();

@@ -54,6 +54,7 @@ public class QuestTask implements Runnable {
     }
     
     public void finish() {
+        fRun = true;
         quest.finish();
     }
  
