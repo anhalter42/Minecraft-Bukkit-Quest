@@ -206,9 +206,9 @@ public class QuestPlugin extends JavaPlugin {
     }
 
     public void stopQuest(QuestTask aTask) {
-        aTask.finish();
         tasks.remove(aTask);
         getServer().getScheduler().cancelTask(aTask.taskId);
+        aTask.finish();
     }
 
     public boolean startBuildingQuest(QuestBuilding lQB) {
@@ -217,6 +217,9 @@ public class QuestPlugin extends JavaPlugin {
         Sign lSign = (Sign)lSignBlock.position.getBlock(lQB.world).getState();
         String lQuestName = lSign.getLine(0);
         Quest lQuest = loadBuildingQuest(lQuestName);
+        lQuest.world = lQB.world;
+        lQuest.edge1 = new BlockPosition(lQB.getBlock("base").position);
+        lQuest.edge1.subtract(lQuest.startPos);
         // get players
         List<Player> lPlayers = lQB.world.getPlayers();
         for(Player lPlayer : lPlayers) {

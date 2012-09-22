@@ -46,7 +46,9 @@ public class QuestBuildingHandler extends BuildingHandlerBase {
         QuestBuilding lQB = (QuestBuilding)aBuilding;
         switch (lQB.kind) {
             case building:
-                QuestPlugin.plugin.startBuildingQuest(lQB);
+                if (aEvent.getNewCurrent() > 0) {
+                    QuestPlugin.plugin.startBuildingQuest(lQB);
+                }
         }
         return true;
     }

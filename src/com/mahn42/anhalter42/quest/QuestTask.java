@@ -25,23 +25,28 @@ public class QuestTask implements Runnable {
         if (!fRun) {
             fRun = true;
             try {
-                if (!fInitialized) {
-                    quest.initialze();
-                    fInitialized = true;
-                }
-                //quest.log("Task begin");
-                synchronized(fInteractions) {
-                    quest.interactions = fInteractions;
-                    fInteractions = new ArrayList<QuestTaskInteraction>();
-                }
-                SyncBlockList lList = new SyncBlockList(quest.world);
-                quest.syncList = lList;
-                quest.run();
-                quest.syncList.execute();
-                quest.syncList = null;
-                //quest.log("Task end");
-                if (quest.stopped) {
-                    stop();
+                try {
+                    if (!fInitialized) {
+                        quest.initialze();
+                        fInitialized = true;
+                    }
+                    //quest.log("Task begin");
+                    synchronized(fInteractions) {
+                        quest.interactions = fInteractions;
+                        fInteractions = new ArrayList<QuestTaskInteraction>();
+                    }
+                    SyncBlockList lList = new SyncBlockList(quest.world);
+                    quest.syncList = lList;
+                    quest.run();
+                    quest.syncList.execute();
+                    quest.syncList = null;
+                    //quest.log("Task end");
+                    if (quest.stopped) {
+                        stop();
+                    }
+                } catch (Exception ex) {
+                    QuestPlugin.plugin.getLogger().throwing(getClass().getSimpleName(), null, ex);
+                    QuestPlugin.plugin.stopQuest(this);
                 }
             } finally {
                 fRun = false;
