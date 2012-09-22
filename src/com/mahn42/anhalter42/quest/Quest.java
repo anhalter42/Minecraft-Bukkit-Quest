@@ -49,6 +49,7 @@ public class Quest extends QuestObject {
     public HashMap<String, BlockPosition> markers = new HashMap<String, BlockPosition>();
     public QuestObjectHashMap<QuestInventory> inventories = new QuestObjectHashMap<QuestInventory>(this, QuestInventory.class);
     public QuestObjectHashMap<QuestVariable> variables = new QuestObjectHashMap<QuestVariable>(this, QuestVariable.class);
+    public QuestObjectArray<PlayerPosition> playerPositions = new QuestObjectArray<PlayerPosition>(this, PlayerPosition.class);
     public String name;
     public String startScene;
     public BlockPosition startPos = new BlockPosition(0,0,0); // relative from player

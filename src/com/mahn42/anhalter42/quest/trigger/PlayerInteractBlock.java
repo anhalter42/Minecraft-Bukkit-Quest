@@ -34,6 +34,12 @@ public class PlayerInteractBlock extends Trigger {
     
     @Override
     public void initialize() {
+        if (from.x == -1 && from.y == -1 && from.z == -1) {
+            from.cloneFrom(to);
+        }
+        if (to.x == -1 && to.y == -1 && to.z == -1) {
+            to.cloneFrom(from);
+        }
         from.add(quest.edge1);
         to.add(quest.edge1);
     }

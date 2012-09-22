@@ -34,6 +34,8 @@ public class Action extends QuestObject{
         Quest.actionTypes.put("setVariable", SetVariable.class);
         Quest.actionTypes.put("replaceBlocks", ReplaceBlocks.class);
         Quest.actionTypes.put("changeInventory", ChangeInventory.class);
+        Quest.actionTypes.put("tellPlayer", TellPlayer.class);
+        Quest.actionTypes.put("initializePlayers", InitializePlayers.class);
     }
 
     public String type;

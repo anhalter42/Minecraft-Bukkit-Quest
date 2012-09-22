@@ -8,6 +8,7 @@ import com.mahn42.framework.Building;
 import com.mahn42.framework.BuildingDB;
 import com.mahn42.framework.BuildingHandlerBase;
 import org.bukkit.World;
+import org.bukkit.event.block.BlockRedstoneEvent;
 
 /**
  *
@@ -27,5 +28,14 @@ public class QuestBuildingHandler extends BuildingHandlerBase {
         lDB.addRecord(lQuestBuilding);
         return lQuestBuilding;
     }
-
+    
+    @Override
+    public boolean redstoneChanged(BlockRedstoneEvent aEvent, Building aBuilding) {
+        QuestBuilding lQB = (QuestBuilding)aBuilding;
+        switch (lQB.kind) {
+            case building:
+                QuestPlugin.plugin.startBuildingQuest(lQB);
+        }
+        return true;
+    }
 }

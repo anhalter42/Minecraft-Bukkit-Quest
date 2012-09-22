@@ -23,10 +23,20 @@ public class PlayerEnteredRegion extends Trigger {
     protected ArrayList<String> fPlayers = new ArrayList<String>();
     // META
     public int player = 0;
-    public BlockPosition from = new BlockPosition();
-    public BlockPosition to = new BlockPosition();
+    public BlockPosition from = new BlockPosition(-1,-1,-1);
+    public BlockPosition to = new BlockPosition(-1,-1,-1);
     public boolean addToPlayers = true;
     public PlayerState playerState = PlayerState.unknown;
+    
+    @Override
+    public void initialize() {
+        if (to.x == -1 && to.y == -1 && to.z == -1) {
+            to.cloneFrom(from);
+        }
+        if (from.x == -1 && from.y == -1 && from.z == -1) {
+            from.cloneFrom(to);
+        }
+    }
     
     protected boolean checkPlayer(Player aPlayer) {
         boolean lResult;

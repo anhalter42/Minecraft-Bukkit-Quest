@@ -12,13 +12,23 @@ import java.util.ArrayList;
  * @author andre
  */
 public class QuestBuilding extends Building {
+    public enum Kind {
+        building,
+        trap,
+        adventure
+    }
+    
+    public Kind kind = Kind.building;
+    
     @Override
     protected void toCSVInternal(ArrayList aCols) {
         super.toCSVInternal(aCols);
+        aCols.add(kind);
     }
 
     @Override
     protected void fromCSVInternal(DBRecordCSVArray aCols) {
         super.fromCSVInternal(aCols);
+        kind = Kind.valueOf(aCols.pop());
     }
 }
