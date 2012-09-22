@@ -50,6 +50,8 @@ public class Quest extends QuestObject {
     public QuestObjectHashMap<QuestInventory> inventories = new QuestObjectHashMap<QuestInventory>(this, QuestInventory.class);
     public QuestObjectHashMap<QuestVariable> variables = new QuestObjectHashMap<QuestVariable>(this, QuestVariable.class);
     public QuestObjectArray<PlayerPosition> playerPositions = new QuestObjectArray<PlayerPosition>(this, PlayerPosition.class);
+    public int minPlayerCount = 1;
+    public int maxPlayerCount = 1;
     public String name;
     public String startScene;
     public BlockPosition startPos = new BlockPosition(0,0,0); // relative from player
@@ -262,6 +264,15 @@ public class Quest extends QuestObject {
             return getPlayer(players.get(aNumber));
         } else {
             return null;
+        }
+    }
+    
+    public void sendPlayerMessage(String aText) {
+        for(String lPlayerName: players) {
+            Player lPlayer = getPlayer(lPlayerName);
+            if (lPlayer != null) {
+                lPlayer.sendMessage(aText);
+            }
         }
     }
 }

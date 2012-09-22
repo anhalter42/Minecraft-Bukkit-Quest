@@ -19,27 +19,35 @@ public class InitializePlayers extends Action {
     @Override
     public void execute() {
         int lIndex = 0;
-        for(String lPlayerName : quest.players) {
-            if (lIndex >= quest.playerPositions.size()) {
-                break;
+        if (quest.playerPositions.size() > 0) {
+            for(String lPlayerName : quest.players) {
+                if (lIndex >= quest.playerPositions.size()) {
+                    lIndex = 0;
+                }
+                Player lPlayer = quest.getPlayer(lPlayerName);
+                PlayerPosition lPPos = quest.playerPositions.get(lIndex);
+                BlockPosition lPos = new BlockPosition(lPPos.pos);
+                lPos.add(quest.edge1);
+                lPlayer.teleport(lPos.getLocation(quest.world), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                quest.log(type + ": teleport player " + (lIndex+1) + " to " + lPPos.pos);
+                lIndex++;
             }
-            Player lPlayer = quest.getPlayer(lPlayerName);
-            PlayerPosition lPPos = quest.playerPositions.get(lIndex);
-            BlockPosition lPos = new BlockPosition(lPPos.pos);
-            lPos.add(quest.edge1);
-            lPlayer.teleport(lPos.getLocation(quest.world), PlayerTeleportEvent.TeleportCause.PLUGIN);
-            quest.log(type + ": teleport player " + lIndex + " to " + lPPos.pos);
-            lIndex++;
         }
         lIndex = 0;
         for(String lPlayerName : quest.players) {
-            QuestInventory lInv = quest.inventories.get(Integer.toString(lIndex));
+            QuestInventory lInv = quest.inventories.get(Integer.toString(lIndex+1));
+            if (lInv != null) {
+                lIndex = 0;
+                lInv = quest.inventories.get(Integer.toString(lIndex+1));
+            }
             if (lInv != null) {
                 Player lPlayer = quest.getPlayer(lPlayerName);
                 PlayerInventory lPI = lPlayer.getInventory();
                 lPI.clear();
                 lInv.toInventory(lPI);
-                quest.log(type + ": change player inventory for " + lIndex);
+                quest.log(type + ": change player inventory for " + (lIndex+1));
+            } else {
+                break;
             }
             lIndex++;
         }

@@ -117,6 +117,7 @@ public class QuestPlugin extends JavaPlugin {
         lBDesc = lDesc.newBlockDescription("base_lamp");
         lBDesc.redstoneSensible = true;
         lBDesc.materials.add(Material.REDSTONE_LAMP_OFF);
+        lBDesc.materials.add(Material.REDSTONE_LAMP_ON);
         lBDesc = lDesc.newBlockDescription("chest");
         lBDesc.materials.add(Material.CHEST);
         lBDesc = lDesc.newBlockDescription("lever");
@@ -145,7 +146,8 @@ public class QuestPlugin extends JavaPlugin {
         lBDesc.materials.add(Material.BRICK);
         lBDesc = lDesc.newBlockDescription("corner_4_top");
         lBDesc.materials.add(Material.BRICK);
-        lDesc.createAndActivateXZ();
+        lDesc.activate();
+        //lDesc.createAndActivateXZ();
     }
 
     @Override
@@ -209,7 +211,7 @@ public class QuestPlugin extends JavaPlugin {
         getServer().getScheduler().cancelTask(aTask.taskId);
     }
 
-    public void startBuildingQuest(QuestBuilding lQB) {
+    public boolean startBuildingQuest(QuestBuilding lQB) {
         // get Quest
         BuildingBlock lSignBlock = lQB.getBlock("sign");
         Sign lSign = (Sign)lSignBlock.position.getBlock(lQB.world).getState();
@@ -223,9 +225,17 @@ public class QuestPlugin extends JavaPlugin {
                 lQuest.players.add(lPlayer.getName());
             }
         }
-        // bring player in position ?
+        if (lQuest.players.size() > lQuest.maxPlayerCount) {
+            lQuest.sendPlayerMessage("too many players for quest " + lQuest.name);
+            return false;
+        }
+        if (lQuest.players.size() < lQuest.minPlayerCount) {
+            lQuest.sendPlayerMessage("not enough players for quest " + lQuest.name);
+            return false;
+        }
         // start quest
         startQuest(lQuest);
+        return true;
     }
 
     private Quest loadBuildingQuest(String lQuestName) {
