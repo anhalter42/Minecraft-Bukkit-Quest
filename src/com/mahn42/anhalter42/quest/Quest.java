@@ -232,7 +232,7 @@ public class Quest extends QuestObject {
                 Framework.plugin.getRestrictedRegions(world, true).remove(restrictedRegion);
             }
             for(String lPlayerName:players) {
-                Framework.plugin.getPlayerManager().increaseSocialPoint(lPlayerName, "Quest", socialPoints, name, "");
+                Framework.plugin.getPlayerManager().increaseSocialPoint("", "Quest", socialPoints, name, lPlayerName);
                 Player lPlayer = Framework.plugin.getServer().getPlayer(lPlayerName);
                 int y = world.getHighestBlockYAt(lPlayer.getLocation());
                 Location lLoc = lPlayer.getLocation().clone();
