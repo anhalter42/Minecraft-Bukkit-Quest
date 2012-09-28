@@ -2,3 +2,16 @@
 ---
 QuestTask:
   Ticks: 1
+WorldClassification:
+  name: quest_flat
+  generateStructures: false
+  generator:
+  seed: 42
+  type: FLAT
+  environment: NORMAL
+  spawnMonsters: false
+  spawnAnimals: false
+  difficulty: NORMAL
+  ownInventory: true
+  gameMode: SURVIVAL
+  playerVsPlayer: false

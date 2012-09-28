@@ -12,10 +12,12 @@ import com.mahn42.framework.BuildingBlock;
 import com.mahn42.framework.BuildingDescription;
 import com.mahn42.framework.BuildingDetector;
 import com.mahn42.framework.Framework;
+import com.mahn42.framework.WorldClassification;
 import com.mahn42.framework.WorldDBList;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
@@ -148,6 +150,7 @@ public class QuestPlugin extends JavaPlugin {
         lBDesc.materials.add(Material.BRICK);
         lDesc.activate();
         //lDesc.createAndActivateXZ();
+        Framework.plugin.requireWorld("world_quest", fWorldClassification);
     }
 
     @Override
@@ -155,9 +158,13 @@ public class QuestPlugin extends JavaPlugin {
         getServer().getScheduler().cancelTasks(this);
     }
     
+    protected WorldClassification fWorldClassification;
     private void readQuestConfig() {
         FileConfiguration lConfig = getConfig();
         configQuestTaskTicks = lConfig.getInt("QuestTask.Ticks");
+        fWorldClassification = new WorldClassification();
+        fWorldClassification.fromSectionValue(lConfig.get("WorldClassification"));
+        Framework.plugin.registerWorldClassification(fWorldClassification);
     }
     
 
