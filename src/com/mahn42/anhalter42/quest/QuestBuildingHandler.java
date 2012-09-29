@@ -11,6 +11,7 @@ import java.io.File;
 import org.bukkit.World;
 import org.bukkit.block.Sign;
 import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  *
@@ -23,6 +24,11 @@ public class QuestBuildingHandler extends BuildingHandlerBase {
     }
     
     @Override
+    public JavaPlugin getPlugin() {
+        return QuestPlugin.plugin;
+    }
+    
+    @Override
     public Building insert(Building aBuilding) {
         if (aBuilding.description.name.startsWith("Quest.Starter")) {
             Sign lSign = (Sign)aBuilding.getBlock("sign").position.getBlock(aBuilding.world).getState();
@@ -30,7 +36,7 @@ public class QuestBuildingHandler extends BuildingHandlerBase {
             File lFolder = QuestPlugin.plugin.getBuildingQuestFolder();
             File lFile = new File(lFolder.getPath() + File.separatorChar + lQuestName);
             if (!lFile.exists()) {
-                aBuilding.sendToPlayer("Quest '" + lQuestName + "' does not exists!");
+                aBuilding.sendToPlayer("Quest '%s' does not exists!", lQuestName);
                 return null;
             }
         }
