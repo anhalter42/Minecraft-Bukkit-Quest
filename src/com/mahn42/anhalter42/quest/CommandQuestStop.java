@@ -20,9 +20,9 @@ public class CommandQuestStop implements CommandExecutor {
             QuestTask lTask = QuestPlugin.plugin.getQuestTask(aStrings[0]);
             if (lTask != null) {
                 QuestPlugin.plugin.stopQuest(lTask);
-                aCommandSender.sendMessage("Quest " + lTask.quest.name + " stopped!");
+                aCommandSender.sendMessage(QuestPlugin.plugin.getText("Quest %s stopped!",lTask.quest.name));
             } else {
-                aCommandSender.sendMessage("Quest " +  aStrings[0] + " not found!");
+                aCommandSender.sendMessage(QuestPlugin.plugin.getText(aCommandSender, "Quest %s not found!", aStrings[0]));
             }
         }
         return true;

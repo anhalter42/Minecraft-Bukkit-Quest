@@ -20,8 +20,10 @@ import java.util.List;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,6 +41,9 @@ public class QuestPlugin extends JavaPlugin {
     
     public ArrayList<QuestTask> tasks = new ArrayList<QuestTask>();
     public WorldDBList<QuestBuildingDB> DBs;
+
+    protected World fQuestWorld;
+    protected QuestWorldAllocator fQWAllocator = new QuestWorldAllocator();
     
     public static void main(String[] args) {
     }
@@ -150,7 +155,7 @@ public class QuestPlugin extends JavaPlugin {
         lBDesc.materials.add(Material.BRICK);
         lDesc.activate();
         //lDesc.createAndActivateXZ();
-        Framework.plugin.requireWorld("world_quest", fWorldClassification);
+        fQuestWorld = Framework.plugin.requireWorld("world_quest", fWorldClassification);
     }
 
     @Override
@@ -209,7 +214,10 @@ public class QuestPlugin extends JavaPlugin {
         QuestTask lTask = getQuestTask(aQuest);
         if (lTask != null) {
             stopQuest(lTask);
-        } 
+        }
+        if (aQuest.buildingQuest != null) {
+            fQWAllocator.free(aQuest.buildingQuest);
+        }
     }
 
     public void stopQuest(QuestTask aTask) {
@@ -224,9 +232,21 @@ public class QuestPlugin extends JavaPlugin {
         Sign lSign = (Sign)lSignBlock.position.getBlock(lQB.world).getState();
         String lQuestName = lSign.getLine(0);
         Quest lQuest = loadBuildingQuest(lQuestName);
-        lQuest.world = lQB.world;
-        lQuest.edge1 = new BlockPosition(lQB.getBlock("base").position);
-        lQuest.edge1.subtract(lQuest.startPos);
+        BuildingQuest lBQ = new BuildingQuest();
+        lBQ.building = lQB;
+        lBQ.quest = lQuest;
+        lQuest.buildingQuest = lBQ;
+        if (lQuest.useQuestWorld) {
+            lQuest.world = fQuestWorld;
+            lBQ.questWorld = lQuest.world;
+            QuestWorldAllocation lA = fQWAllocator.alloc(lBQ);
+            lQuest.edge1 = lA.pos;
+        } else {
+            lQuest.world = lQB.world;
+            lBQ.questWorld = lQuest.world;
+            lQuest.edge1 = new BlockPosition(lQB.getBlock("base").position);
+            lQuest.edge1.subtract(lQuest.startPos);
+        }
         // get players
         List<Player> lPlayers = lQB.world.getPlayers();
         for(Player lPlayer : lPlayers) {
@@ -236,11 +256,11 @@ public class QuestPlugin extends JavaPlugin {
             }
         }
         if (lQuest.players.size() > lQuest.maxPlayerCount) {
-            lQuest.sendPlayerMessage("too many players for quest " + lQuest.name);
+            lQuest.sendPlayerMessage("too many players for quest %s!", lQuest.name);
             return false;
         }
         if (lQuest.players.size() < lQuest.minPlayerCount) {
-            lQuest.sendPlayerMessage("not enough players for quest " + lQuest.name);
+            lQuest.sendPlayerMessage("not enough players for quest %s!", lQuest.name);
             return false;
         }
         // start quest
@@ -258,5 +278,17 @@ public class QuestPlugin extends JavaPlugin {
         lQuest = new Quest();
         lQuest.load(lFile);
         return lQuest;
+    }
+    
+    public String getText(String aText, Object... aObjects) {
+        return getText((String)null, aText, aObjects);
+    }
+    
+    public String getText(CommandSender aPlayer, String aText, Object... aObjects) {
+        return getText(Framework.plugin.getPlayerLanguage(aPlayer.getName()), aText, aObjects);
+    }
+    
+    public String getText(String aLanguage, String aText, Object... aObjects) {
+        return Framework.plugin.getText(this, aLanguage, aText, aObjects);
     }
 }

@@ -28,11 +28,14 @@ public class CommandQuestStart  implements CommandExecutor {
                 }
                 Quest lQuest = new Quest();
                 lQuest.world = lPlayer.getWorld();
-                lQuest.load(lFile);
-                lQuest.edge1 = new BlockPosition(lPlayer.getLocation());
-                lQuest.edge1.subtract(lQuest.startPos);
-                QuestPlugin.plugin.startQuest(lQuest);
-                aCommandSender.sendMessage("Quest " + lQuest.name + " started.");
+                if (lQuest.load(lFile)) {
+                    lQuest.edge1 = new BlockPosition(lPlayer.getLocation());
+                    lQuest.edge1.subtract(lQuest.startPos);
+                    QuestPlugin.plugin.startQuest(lQuest);
+                    aCommandSender.sendMessage(QuestPlugin.plugin.getText(aCommandSender, "Quest %s started.", lQuest.name));
+                } else {
+                    aCommandSender.sendMessage(QuestPlugin.plugin.getText(aCommandSender, "Quest %s could not loaded!", lQuest.name));
+                }
             }
         }
         return true;

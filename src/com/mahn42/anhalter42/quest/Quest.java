@@ -43,6 +43,8 @@ public class Quest extends QuestObject {
     public HashMap<String, Object> objects = new HashMap<String, Object>();
     public RestrictedRegion restrictedRegion = new RestrictedRegion();
     public ArrayList<QuestTaskInteraction> interactions;
+    public File workingDirectory = null;
+    public BuildingQuest buildingQuest;
     
     /* Meta */
     public QuestObjectArray<Scene> scenes = new QuestObjectArray<Scene>(this, Scene.class);
@@ -62,6 +64,7 @@ public class Quest extends QuestObject {
     public boolean restrictRegion = true;
     public ActionList stopActions = new ActionList(this);
     public ActionList startActions = new ActionList(this);
+    public boolean useQuestWorld = true;
     
     /* Static */
     public static HashMap<String, Class> actionTypes = new HashMap<String, Class>();
@@ -72,14 +75,17 @@ public class Quest extends QuestObject {
         quest = this;
     }
     
-    public void load(File aFile) {
+    public boolean load(File aFile) {
         YamlConfiguration lConf = new YamlConfiguration(); 
         try {
             lConf.load(aFile);
             fromSectionValue(lConf.get("quest"));
             frames.load(new File(aFile.toString().replaceAll(".yml", ".frm")));
+            workingDirectory = aFile.getParentFile();
+            return true;
         } catch (Exception ex) {
             Logger.getLogger(Quest.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
     }
     
@@ -96,18 +102,6 @@ public class Quest extends QuestObject {
         }
     }
 
-    /*
-    public void setScenesFromSectionValue(Object aValue) {
-        if (aValue instanceof ArrayList) {
-            for(Object lItem : ((ArrayList)aValue)) {
-                Scene lScene = new Scene();
-                lScene.quest = this;
-                lScene.fromSectionValue(lItem);
-                scenes.add(lScene);
-            }
-        }
-    }*/
-
     public void setMarkersFromSectionValue(Object aValue) {
         if (aValue instanceof ArrayList) {
             for(Object lItem : ((ArrayList)aValue)) {
@@ -118,29 +112,7 @@ public class Quest extends QuestObject {
             }
         }
     }
-/*
-    public void setVariablesFromSectionValue(Object aValue) {
-        if (aValue instanceof ArrayList) {
-            for(Object lItem : ((ArrayList)aValue)) {
-                QuestVariable lVar = new QuestVariable();
-                lVar.quest = this;
-                lVar.fromSectionValue(lItem);
-                variables.put(lVar.name, lVar);
-            }
-        }
-    }
 
-    public void setInventoriesFromSectionValue(Object aValue) {
-        if (aValue instanceof ArrayList) {
-            for(Object lItem : ((ArrayList)aValue)) {
-                QuestInventory lInv = new QuestInventory();
-                lInv.quest = this;
-                lInv.fromSectionValue(lItem);
-                inventories.put(lInv.name, lInv);
-            }
-        }
-    }
-*/
     public Scene getScene(String aName) {
         for(Scene lScene : scenes) {
             if (lScene.name.equals(aName)) {
@@ -267,11 +239,11 @@ public class Quest extends QuestObject {
         }
     }
     
-    public void sendPlayerMessage(String aText) {
+    public void sendPlayerMessage(String aText, Object... aObjects) {
         for(String lPlayerName: players) {
             Player lPlayer = getPlayer(lPlayerName);
             if (lPlayer != null) {
-                lPlayer.sendMessage(aText);
+                lPlayer.sendMessage(QuestPlugin.plugin.getText(lPlayer, aText, aObjects));
             }
         }
     }
