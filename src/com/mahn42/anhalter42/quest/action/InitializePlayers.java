@@ -32,6 +32,16 @@ public class InitializePlayers extends Action {
                 quest.log(type + ": teleport player " + (lIndex+1) + " to " + lPPos.pos);
                 lIndex++;
             }
+        } else {
+            for(String lPlayerName : quest.players) {
+                Player lPlayer = quest.getPlayer(lPlayerName);
+                if (quest.world != lPlayer.getWorld()) {
+                    BlockPosition lPos = new BlockPosition(quest.startPos);
+                    lPos.add(quest.edge1);
+                    lPlayer.teleport(lPos.getLocation(quest.world), PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    quest.log(type + ": teleport player " + (lIndex+1) + " to real pos " + lPos);
+                }
+            }
         }
         lIndex = 0;
         for(String lPlayerName : quest.players) {

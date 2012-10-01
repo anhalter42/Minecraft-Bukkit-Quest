@@ -43,13 +43,19 @@ public class QuestWorldAllocator extends ArrayList<QuestWorldAllocation> {
                     lPos = new BlockPosition();
                 }
                 QuestWorldAllocation lA = new QuestWorldAllocation();
+                lPos.y = aUsage.questWorld.getHighestBlockYAt(lPos.x, lPos.z);
                 lA.pos = lPos;
                 lA.usedFrom = aUsage;
                 lA.width = aUsage.quest.width;
                 add(lA);
+                lResult = lA;
             }
         }
-        //TODO cleanup region?
+        for(int x=0;x<lResult.width;x++) {
+            for(int z=0;z<lResult.usedFrom.quest.depth;z++) {
+                lResult.usedFrom.questWorld.regenerateChunk(lResult.pos.x+x, lResult.pos.z+z);
+            }
+        }
         return lResult;
     }
     

@@ -253,6 +253,7 @@ public class QuestPlugin extends JavaPlugin {
             BlockPosition lPlayerPos = new BlockPosition(lPlayer.getLocation());
             if (lPlayerPos.isBetween(lQB.edge1, lQB.edge2)) {
                 lQuest.players.add(lPlayer.getName());
+                lQuest.log("Player " + lPlayer.getName() + " is now in quest " + lQuest.name);
             }
         }
         if (lQuest.players.size() > lQuest.maxPlayerCount) {
@@ -276,6 +277,7 @@ public class QuestPlugin extends JavaPlugin {
             lFile = new File(lFile.getPath() + File.separatorChar + "start.yml");
         }
         lQuest = new Quest();
+        lQuest.log("load quest file from " + lFile.toString());
         lQuest.load(lFile);
         return lQuest;
     }
