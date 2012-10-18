@@ -8,10 +8,13 @@ WorldClassification:
   generator:
   seed: 42
   type: FLAT
+  noInventory: true
   environment: NORMAL
-  spawnMonsters: false
-  spawnAnimals: false
+  spawnMonsters: true
+  spawnAnimals: true
   difficulty: NORMAL
-  ownInventory: true
   gameMode: SURVIVAL
   playerVsPlayer: false
+  entitySpawnCheck: true
+  naturalEntityTypes: []
+  customEntityTypes: [all]
