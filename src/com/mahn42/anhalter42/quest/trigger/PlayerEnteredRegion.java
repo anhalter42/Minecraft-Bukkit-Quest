@@ -81,7 +81,7 @@ public class PlayerEnteredRegion extends Trigger {
                 if (!fPlayers.contains(lPlayer.getName())) {
                     if (checkPlayer(lPlayer)) {
                         if (addToPlayers && !quest.players.contains(lPlayer.getName())) {
-                            quest.players.add(lPlayer.getName());
+                            quest.addPlayer(lPlayer);
                         }
                         lResult = true;
                     }

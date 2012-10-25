@@ -68,7 +68,7 @@ public class PlayerInteractBlock extends Trigger {
                     }
                 } else {
                     if (addToPlayers && !quest.players.contains(lI.player.getName())) {
-                        quest.players.add(lI.player.getName());
+                        quest.addPlayer(lI.player);
                     }
                     lResult = true;
                 }

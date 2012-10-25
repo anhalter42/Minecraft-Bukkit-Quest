@@ -34,6 +34,7 @@ public class Quest extends QuestObject {
     public Random random = new Random();
     public World world = null;
     public ArrayList<String> players = new ArrayList<String>();
+    public ArrayList<Location> playerStartingLocations = new ArrayList<Location>();
     public Scene currentScene = null;
     public SyncBlockList syncList = null;
     public BlockPosition edge1 = new BlockPosition();
@@ -203,13 +204,13 @@ public class Quest extends QuestObject {
             if (restrictRegion) {
                 Framework.plugin.getRestrictedRegions(world, true).remove(restrictedRegion);
             }
+            int lIndex = 0;
             for(String lPlayerName:players) {
                 Framework.plugin.getPlayerManager().increaseSocialPoint("", "Quest", socialPoints, name, lPlayerName);
                 Player lPlayer = Framework.plugin.getServer().getPlayer(lPlayerName);
-                int y = world.getHighestBlockYAt(lPlayer.getLocation());
-                Location lLoc = lPlayer.getLocation().clone();
-                lLoc.setY(y);
+                Location lLoc = playerStartingLocations.get(lIndex);
                 lPlayer.teleport(lLoc, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                lIndex++;
             }
             stopped = true;
             QuestPlugin.plugin.stopQuest(this);
@@ -245,6 +246,13 @@ public class Quest extends QuestObject {
             if (lPlayer != null) {
                 lPlayer.sendMessage(QuestPlugin.plugin.getText(lPlayer, aText, aObjects));
             }
+        }
+    }
+
+    public void addPlayer(Player aPlayer) {
+        if (!players.contains(aPlayer.getName())) {
+            players.add(aPlayer.getName());
+            playerStartingLocations.add(aPlayer.getLocation());
         }
     }
 }
