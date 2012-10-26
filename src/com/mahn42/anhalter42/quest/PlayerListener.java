@@ -10,13 +10,31 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
  *
  * @author andre
  */
 public class PlayerListener implements Listener {
+
+    @EventHandler
+    public void playerDied(PlayerDeathEvent aEvent) {
+        ArrayList<Quest> lQuests = QuestPlugin.plugin.getQuests(aEvent.getEntity());
+        for(Quest lQuest : lQuests) {
+            lQuest.playerIsDied(aEvent.getEntity().getName());
+        }
+    }
+    
+    @EventHandler
+    public void playerQuit(PlayerQuitEvent aEvent) {
+        ArrayList<Quest> lQuests = QuestPlugin.plugin.getQuests(aEvent.getPlayer());
+        for(Quest lQuest : lQuests) {
+            lQuest.removePlayer(aEvent.getPlayer().getName());
+        }
+    }
     
     @EventHandler
     public void playerInteract(PlayerInteractEvent aEvent) {

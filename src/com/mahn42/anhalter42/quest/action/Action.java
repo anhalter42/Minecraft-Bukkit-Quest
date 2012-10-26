@@ -36,6 +36,7 @@ public class Action extends QuestObject{
         Quest.actionTypes.put("storeArea", StoreArea.class);
         Quest.actionTypes.put("teleportPlayer", TeleportPlayer.class);
         Quest.actionTypes.put("tellPlayer", TellPlayer.class);
+        Quest.actionTypes.put("defineCheckpoint", DefineCheckPoint.class);
     }
 
     public String type;

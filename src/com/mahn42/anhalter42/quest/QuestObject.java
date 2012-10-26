@@ -5,6 +5,7 @@
 package com.mahn42.anhalter42.quest;
 
 import com.mahn42.framework.BlockPosition;
+import com.mahn42.framework.BlockRect;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -59,6 +60,8 @@ public class QuestObject {
                             ((BlockPosition)lValue).fromCSV(aValue.toString(), ",");
                         }
                         lSet = true;
+                    } else if (lValue instanceof BlockRect) {
+                        ((BlockRect)lValue).fromCSV(aValue.toString(), ",");
                     } else if (lValue instanceof QuestObjectArray) {
                         ((QuestObjectArray)lValue).quest = quest;
                         ((QuestObjectArray)lValue).fromSectionValue(aValue);

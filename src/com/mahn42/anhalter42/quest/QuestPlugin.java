@@ -291,4 +291,14 @@ public class QuestPlugin extends JavaPlugin {
     public String getText(String aLanguage, String aText, Object... aObjects) {
         return Framework.plugin.getText(this, aLanguage, aText, aObjects);
     }
+
+    public ArrayList<Quest> getQuests(Player aPlayer) {
+        ArrayList<Quest> lResult = new ArrayList<Quest>();
+        for(QuestTask lTask : tasks) {
+            if (lTask.quest.players.contains(aPlayer.getName())) {
+                lResult.add(lTask.quest);
+            }
+        }
+        return lResult;
+    }
 }

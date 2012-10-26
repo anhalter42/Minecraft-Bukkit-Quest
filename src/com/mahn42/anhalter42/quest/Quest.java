@@ -46,6 +46,7 @@ public class Quest extends QuestObject {
     public ArrayList<QuestTaskInteraction> interactions;
     public File workingDirectory = null;
     public BuildingQuest buildingQuest;
+    public ArrayList<PlayerCheckPoint> playerCheckpoints = new ArrayList<PlayerCheckPoint>();
     
     /* Meta */
     public QuestObjectArray<Scene> scenes = new QuestObjectArray<Scene>(this, Scene.class);
@@ -53,6 +54,7 @@ public class Quest extends QuestObject {
     public QuestObjectHashMap<QuestInventory> inventories = new QuestObjectHashMap<QuestInventory>(this, QuestInventory.class);
     public QuestObjectHashMap<QuestVariable> variables = new QuestObjectHashMap<QuestVariable>(this, QuestVariable.class);
     public QuestObjectArray<PlayerPosition> playerPositions = new QuestObjectArray<PlayerPosition>(this, PlayerPosition.class);
+    public QuestObjectArray<QuestCheckPoint> checkpoints = new QuestObjectArray<QuestCheckPoint>(this, QuestCheckPoint.class);
     public int minPlayerCount = 1;
     public int maxPlayerCount = 1;
     public String name;
@@ -187,6 +189,16 @@ public class Quest extends QuestObject {
                     ((IQuestTick)lObject).tick();
                 }
             }
+            for(QuestCheckPoint lCP : checkpoints) {
+                for(String lPlayerName : players) {
+                    Player lPlayer = getPlayer(lPlayerName);
+                    if (lPlayer != null) {
+                        if (lCP.region.isBetween(new BlockPosition(lPlayer.getLocation()))) {
+                            setPlayerCheckpoint(lCP, lPlayer);
+                        }
+                    }
+                }
+            }
             currentScene.run();
         } else {
             stop();
@@ -253,6 +265,70 @@ public class Quest extends QuestObject {
         if (!players.contains(aPlayer.getName())) {
             players.add(aPlayer.getName());
             playerStartingLocations.add(aPlayer.getLocation());
+        }
+    }
+
+    public void addCheckpoint(QuestCheckPoint aCP) {
+        for(QuestCheckPoint lCP : checkpoints) {
+            if (lCP.region.equals(aCP.region)) {
+                lCP.text = aCP.text;
+                return;
+            }
+        }
+        checkpoints.add(aCP);
+    }
+    
+    public void setPlayerCheckpoint(QuestCheckPoint aCheckpoint, Player aPlayer) {
+        boolean lDone = false;
+        for(PlayerCheckPoint lCP : playerCheckpoints) {
+            if (lCP.playerName == aPlayer.getName()) {
+                lCP.fromPlayer(aPlayer);
+                lDone = true;
+            }
+        }
+        if (!lDone) {
+            PlayerCheckPoint lCP = new PlayerCheckPoint(aPlayer);
+            playerCheckpoints.add(lCP);
+        }
+        if (aCheckpoint != null) {
+            aPlayer.sendMessage(aCheckpoint.text);
+        }
+    }
+    
+    public boolean activatePlayerCheckpoint(Player aPlayer) {
+        for(PlayerCheckPoint lCP : playerCheckpoints) {
+            if (lCP.playerName == aPlayer.getName()) {
+                lCP.updatePlayer();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void removePlayer(String aPlayerName) {
+        int lIndex = -1;
+        for(String lPlayerName : players) {
+            lIndex++;
+            if (lPlayerName == aPlayerName) {
+                break;
+            }
+        }
+        playerStartingLocations.remove(lIndex);
+        players.remove(lIndex);
+        PlayerCheckPoint lfCP = null;
+        for(PlayerCheckPoint lCP : playerCheckpoints) {
+            if (lCP.playerName == aPlayerName) {
+                break;
+            }
+        }
+        if (lfCP != null) {
+            playerCheckpoints.remove(lfCP);
+        }
+    }
+
+    public void playerIsDied(String aPlayerName) {
+        if (!activatePlayerCheckpoint(getPlayer(aPlayerName))) {
+            removePlayer(aPlayerName);
         }
     }
 }
