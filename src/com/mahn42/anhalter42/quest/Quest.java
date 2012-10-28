@@ -110,7 +110,7 @@ public class Quest extends QuestObject {
             for(Object lItem : ((ArrayList)aValue)) {
                 HashMap<String, String> lMap = (HashMap)lItem;
                 BlockPosition lPos = new BlockPosition();
-                lPos.fromCSV(lMap.get("pos"), ",");
+                lPos.fromCSV(lMap.get("pos"), "\\,");
                 markers.put(lMap.get("name"), lPos);
             }
         }

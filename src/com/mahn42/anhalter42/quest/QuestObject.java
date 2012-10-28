@@ -54,10 +54,10 @@ public class QuestObject {
                             if (lPos != null) {
                                 ((BlockPosition)lValue).cloneFrom(lPos);
                             } else {
-                                ((BlockPosition)lValue).fromCSV(aValue.toString(), ",");
+                                ((BlockPosition)lValue).fromCSV(aValue.toString(), "\\,");
                             }
                         } else {
-                            ((BlockPosition)lValue).fromCSV(aValue.toString(), ",");
+                            ((BlockPosition)lValue).fromCSV(aValue.toString(), "\\,");
                         }
                         lSet = true;
                     } else if (lValue instanceof BlockRect) {
