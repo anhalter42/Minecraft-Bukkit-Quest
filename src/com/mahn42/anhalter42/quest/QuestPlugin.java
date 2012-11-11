@@ -61,6 +61,11 @@ public class QuestPlugin extends JavaPlugin {
         return new File(lDataPath + File.separatorChar + "AdventureQuests");
     }
 
+    public File getCommandQuestFolder() {
+        String lDataPath = getDataFolder().getPath();
+        return new File(lDataPath + File.separatorChar + "CommandQuests");
+    }
+
     @Override
     public void onEnable() { 
         plugin = this;
@@ -93,6 +98,10 @@ public class QuestPlugin extends JavaPlugin {
             lFolder.mkdirs();
         }
         lFolder = getAdventureQuestFolder();
+        if (!lFolder.exists()) {
+            lFolder.mkdirs();
+        }
+        lFolder = getCommandQuestFolder();
         if (!lFolder.exists()) {
             lFolder.mkdirs();
         }

@@ -61,7 +61,39 @@ public class QuestObject {
                         }
                         lSet = true;
                     } else if (lValue instanceof BlockRect) {
-                        ((BlockRect)lValue).fromCSV(aValue.toString(), ",");
+                        if (quest != null) {
+                            BlockRect lRect = null;
+                            BlockPosition ledge1 = new BlockPosition();
+                            BlockPosition ledge2 = new BlockPosition();
+                            String[] lParts = aValue.toString().replaceAll("\\(", "").replaceAll("\\)", "").split(" - ");
+                            if (lParts.length > 1) {
+                                BlockPosition lPos = quest.markers.get(lParts[0]);
+                                if (lPos != null) {
+                                    ledge1.cloneFrom(lPos);
+                                } else {
+                                    ledge1.fromCSV(aValue.toString(), "\\,");
+                                }
+                                lPos = quest.markers.get(lParts[1]);
+                                if (lPos != null) {
+                                    ledge2.cloneFrom(lPos);
+                                } else {
+                                    ledge2.fromCSV(lParts[1], "\\,");
+                                }
+                            } else if (lParts.length > 0) {
+                                BlockPosition lPos = quest.markers.get(lParts[0]);
+                                if (lPos != null) {
+                                    ledge1.cloneFrom(lPos);
+                                } else {
+                                    ledge1.fromCSV(lParts[0], "\\,");
+                                }
+                                ledge2.cloneFrom(ledge1);
+                            }
+                            lRect = new BlockRect(ledge1, ledge2);
+                            ((BlockRect)lValue).cloneFrom(lRect);
+                        } else {
+                            ((BlockRect)lValue).fromCSV(aValue.toString(), "\\,");
+                        }
+                        lSet = true;
                     } else if (lValue instanceof QuestObjectArray) {
                         ((QuestObjectArray)lValue).quest = quest;
                         ((QuestObjectArray)lValue).fromSectionValue(aValue);
