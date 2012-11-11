@@ -8,7 +8,10 @@ import com.mahn42.anhalter42.quest.action.Action;
 import com.mahn42.anhalter42.quest.action.ActionList;
 import com.mahn42.framework.BlockAreaList;
 import com.mahn42.framework.BlockPosition;
+import com.mahn42.framework.BlockRect;
 import com.mahn42.framework.Framework;
+import com.mahn42.framework.ProjectionArea;
+import com.mahn42.framework.ProjectionAreas;
 import com.mahn42.framework.RestrictedRegion;
 import com.mahn42.framework.SyncBlockList;
 import java.io.File;
@@ -47,6 +50,7 @@ public class Quest extends QuestObject {
     public File workingDirectory = null;
     public BuildingQuest buildingQuest;
     public ArrayList<PlayerCheckPoint> playerCheckpoints = new ArrayList<PlayerCheckPoint>();
+    public ProjectionAreas projectionAreas;
     
     /* Meta */
     public QuestObjectArray<Scene> scenes = new QuestObjectArray<Scene>(this, Scene.class);
@@ -156,6 +160,9 @@ public class Quest extends QuestObject {
         if (restrictRegion) {
             Framework.plugin.getRestrictedRegions(world, true).add(restrictedRegion);
         }
+        if (projectionAreas == null) {
+            projectionAreas = new ProjectionAreas(world);
+        }
         for(Scene lScene : scenes) {
             lScene.initilize();
         }
@@ -215,6 +222,15 @@ public class Quest extends QuestObject {
             syncList.execute();
             if (restrictRegion) {
                 Framework.plugin.getRestrictedRegions(world, true).remove(restrictedRegion);
+            }
+            if (projectionAreas != null) {
+                ProjectionAreas lAreas = Framework.plugin.getProjectionAreas(world, false);
+                if (lAreas != null) {
+                    for(ProjectionArea lArea : projectionAreas) {
+                        lAreas.remove(lArea);
+                    }
+                    projectionAreas.clear();
+                }
             }
             int lIndex = 0;
             for(String lPlayerName:players) {
@@ -329,6 +345,29 @@ public class Quest extends QuestObject {
     public void playerIsDied(String aPlayerName) {
         if (!activatePlayerCheckpoint(getPlayer(aPlayerName))) {
             removePlayer(aPlayerName);
+        }
+    }
+
+    public void addProjectionArea(ProjectionArea aArea) {
+        projectionAreas.add(aArea);
+        ProjectionAreas lAreas = Framework.plugin.getProjectionAreas(world, true);
+        lAreas.add(aArea);
+    }
+
+    public void removeProjectionArea(BlockPosition aDestination) {
+        ProjectionArea lFArea = null;
+        for(ProjectionArea lArea : projectionAreas) {
+            if (lArea.destination.equals(aDestination)) {
+                lFArea = lArea;
+                break;
+            }
+        }
+        if (lFArea != null) {
+            projectionAreas.remove(lFArea);
+            ProjectionAreas lAreas = Framework.plugin.getProjectionAreas(world, false);
+            if (lAreas != null) {
+                lAreas.remove(lFArea);
+            }
         }
     }
 }

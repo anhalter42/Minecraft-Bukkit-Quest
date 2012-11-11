@@ -37,6 +37,8 @@ public class Action extends QuestObject{
         Quest.actionTypes.put("teleportPlayer", TeleportPlayer.class);
         Quest.actionTypes.put("tellPlayer", TellPlayer.class);
         Quest.actionTypes.put("defineCheckpoint", DefineCheckPoint.class);
+        Quest.actionTypes.put("activateProjectionArea", ActivateProjectionArea.class);
+        Quest.actionTypes.put("deactivateProjectionArea", DeactivateProjectionArea.class);
     }
 
     public String type;
