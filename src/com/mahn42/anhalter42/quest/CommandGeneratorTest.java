@@ -6,9 +6,9 @@ package com.mahn42.anhalter42.quest;
 
 import com.mahn42.anhalter42.quest.action.GenerateBlocks;
 import com.mahn42.framework.BlockPosition;
-import com.mahn42.framework.BookAndQuill;
 import com.mahn42.framework.SyncBlockList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,10 +18,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.MemorySection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 
 /**
  *
@@ -44,8 +44,8 @@ public class CommandGeneratorTest implements CommandExecutor {
                 HashMap<String,Object> lMap = new HashMap<String, Object>();
                 ItemStack lItemInHand = lPlayer.getItemInHand();
                 if (lItemInHand != null && lItemInHand.getType().equals(Material.BOOK_AND_QUILL)) {
-                    BookAndQuill lBook = new BookAndQuill(lItemInHand);
-                    String[] lPages = lBook.getPages();
+                    BookMeta lBook = (BookMeta)lItemInHand.getItemMeta();
+                    List<String> lPages = lBook.getPages();
                     String lContent = "";
                     for(String lPage : lPages) {
                         lContent += lPage.replaceAll("_", " ");

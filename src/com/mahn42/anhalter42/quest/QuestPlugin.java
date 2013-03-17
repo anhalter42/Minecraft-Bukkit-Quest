@@ -6,6 +6,7 @@ package com.mahn42.anhalter42.quest;
 
 import com.mahn42.anhalter42.quest.action.Action;
 import com.mahn42.anhalter42.quest.action.GenerateBlocks;
+import com.mahn42.anhalter42.quest.trait.QuestNPCTrait;
 import com.mahn42.anhalter42.quest.trigger.Trigger;
 import com.mahn42.framework.BlockPosition;
 import com.mahn42.framework.BuildingBlock;
@@ -23,6 +24,7 @@ import org.bukkit.World;
 import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
@@ -74,6 +76,7 @@ public class QuestPlugin extends JavaPlugin {
         Framework.plugin.registerSaver(DBs);
         Trigger.register();
         Action.register();
+        QuestNPCTrait.register();
         GenerateBlocks.register();
         getCommand("q_start").setExecutor(new CommandQuestStart());
         getCommand("q_stop").setExecutor(new CommandQuestStop());
@@ -301,11 +304,20 @@ public class QuestPlugin extends JavaPlugin {
         return Framework.plugin.getText(this, aLanguage, aText, aObjects);
     }
 
-    public ArrayList<Quest> getQuests(Player aPlayer) {
+    public ArrayList<Quest> getQuests(Entity aEntity) {
         ArrayList<Quest> lResult = new ArrayList<Quest>();
-        for(QuestTask lTask : tasks) {
-            if (lTask.quest.players.contains(aPlayer.getName())) {
-                lResult.add(lTask.quest);
+        if (aEntity instanceof Player) {
+            Player lPlayer = (Player)aEntity;
+            for(QuestTask lTask : tasks) {
+                if (lTask.quest.players.contains(lPlayer.getName())) {
+                    lResult.add(lTask.quest);
+                }
+            }
+        } else {
+            for(QuestTask lTask : tasks) {
+                if (lTask.quest.npcs.contains(aEntity.getEntityId())) {
+                    lResult.add(lTask.quest);
+                }
             }
         }
         return lResult;

@@ -1,7 +1,7 @@
 ## YAML Template.
 name: Quest
 main: com.mahn42.anhalter42.quest.QuestPlugin
-version: 0.11
+version: 0.20
 depend: [MAHN42-Framework]
 commands:
    q_start:

@@ -31,6 +31,7 @@ public class QuestObjectArray<T extends QuestObject> extends ArrayList<T> {
                 try {
                     T lNew = (T)getItemClass(lItem).newInstance();
                     lNew.quest = quest;
+                    lNew.init();
                     lNew.fromSectionValue(lItem);
                     add(lNew);
                 } catch (InstantiationException ex) {

@@ -8,7 +8,6 @@ import com.mahn42.framework.BlockPosition;
 import com.mahn42.framework.BlockRect;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -22,6 +21,9 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class QuestObject {
     public Quest quest = null;
+    
+    public void init() {
+    }
     
     public void _setFieldFromSectionValue(String aName, Object aValue) {
         Class lClass = getClass();

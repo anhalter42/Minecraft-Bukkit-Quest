@@ -5,6 +5,7 @@
 package com.mahn42.anhalter42.quest;
 
 import com.mahn42.framework.BlockPosition;
+import com.mahn42.framework.EntityReachedPathItemEvent;
 import java.util.ArrayList;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -20,6 +21,15 @@ import org.bukkit.event.player.PlayerQuitEvent;
  */
 public class PlayerListener implements Listener {
 
+    @EventHandler
+    public void entityReachedPos(EntityReachedPathItemEvent aEvent) {
+        ArrayList<Quest> lQuests = QuestPlugin.plugin.getQuests(aEvent.getEntity());
+        for(Quest lQuest : lQuests) {
+            lQuest.entityReachedPosition(aEvent);
+            break;
+        }
+    }
+    
     @EventHandler
     public void playerDied(PlayerDeathEvent aEvent) {
         ArrayList<Quest> lQuests = QuestPlugin.plugin.getQuests(aEvent.getEntity());

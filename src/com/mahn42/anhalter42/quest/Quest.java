@@ -6,9 +6,10 @@ package com.mahn42.anhalter42.quest;
 
 import com.mahn42.anhalter42.quest.action.Action;
 import com.mahn42.anhalter42.quest.action.ActionList;
+import com.mahn42.anhalter42.quest.trait.QuestNPC;
 import com.mahn42.framework.BlockAreaList;
 import com.mahn42.framework.BlockPosition;
-import com.mahn42.framework.BlockRect;
+import com.mahn42.framework.EntityReachedPathItemEvent;
 import com.mahn42.framework.Framework;
 import com.mahn42.framework.ProjectionArea;
 import com.mahn42.framework.ProjectionAreas;
@@ -59,6 +60,7 @@ public class Quest extends QuestObject {
     public QuestObjectHashMap<QuestVariable> variables = new QuestObjectHashMap<QuestVariable>(this, QuestVariable.class);
     public QuestObjectArray<PlayerPosition> playerPositions = new QuestObjectArray<PlayerPosition>(this, PlayerPosition.class);
     public QuestObjectArray<QuestCheckPoint> checkpoints = new QuestObjectArray<QuestCheckPoint>(this, QuestCheckPoint.class);
+    public QuestObjectArray<QuestNPC> npcs = new QuestObjectArray<QuestNPC>(this, QuestNPC.class);
     public int minPlayerCount = 1;
     public int maxPlayerCount = 1;
     public String name;
@@ -77,6 +79,7 @@ public class Quest extends QuestObject {
     public static HashMap<String, Class> actionTypes = new HashMap<String, Class>();
     public static HashMap<String, Class> triggerTypes = new HashMap<String, Class>();
     public static HashMap<String, Class> generatorTypes = new HashMap<String, Class>();
+    public static HashMap<String, Class> traitTypes = new HashMap<String, Class>();
     
     public Quest() {
         quest = this;
@@ -369,5 +372,9 @@ public class Quest extends QuestObject {
                 lAreas.remove(lFArea);
             }
         }
+    }
+
+    public void entityReachedPosition(EntityReachedPathItemEvent aEvent) {
+        
     }
 }
