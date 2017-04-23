@@ -9,7 +9,6 @@ import com.mahn42.anhalter42.quest.action.ActionList;
 import com.mahn42.anhalter42.quest.trait.QuestNPC;
 import com.mahn42.framework.BlockAreaList;
 import com.mahn42.framework.BlockPosition;
-import com.mahn42.framework.EntityReachedPathItemEvent;
 import com.mahn42.framework.Framework;
 import com.mahn42.framework.ProjectionArea;
 import com.mahn42.framework.ProjectionAreas;
@@ -372,9 +371,5 @@ public class Quest extends QuestObject {
                 lAreas.remove(lFArea);
             }
         }
-    }
-
-    public void entityReachedPosition(EntityReachedPathItemEvent aEvent) {
-        
     }
 }

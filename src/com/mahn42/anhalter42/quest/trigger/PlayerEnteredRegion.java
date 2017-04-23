@@ -7,6 +7,7 @@ package com.mahn42.anhalter42.quest.trigger;
 import com.mahn42.anhalter42.quest.QuestPlugin;
 import com.mahn42.framework.BlockPosition;
 import java.util.ArrayList;
+import java.util.Collection;
 import org.bukkit.entity.Player;
 
 /**
@@ -76,7 +77,7 @@ public class PlayerEnteredRegion extends Trigger {
             }
         }
         if (player == 0) {
-            Player[] lPlayers = QuestPlugin.plugin.getServer().getOnlinePlayers();
+            Collection<? extends Player> lPlayers = QuestPlugin.plugin.getServer().getOnlinePlayers();
             for(Player lPlayer : lPlayers) {
                 if (!fPlayers.contains(lPlayer.getName())) {
                     if (checkPlayer(lPlayer)) {
